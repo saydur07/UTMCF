@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// src/components/Admin/AdminDashboard.js - UPDATED WITH END SCHEDULE BUTTON
+// src/components/Admin/AdminDashboard.js 
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
@@ -285,7 +284,7 @@ Type "DELETE COMPLETELY" to confirm:`;
         }
     };
 
-    // ✅ NEW: End scheduled maintenance function
+    // End scheduled maintenance function
     const handleEndScheduledMaintenance = async () => {
         const confirmEnd = window.confirm(
             `🗑️ END SCHEDULED MAINTENANCE\n\nAre you sure you want to cancel the scheduled maintenance?\n\nScheduled: ${formatDate(systemStatus.scheduledStart)} - ${formatDate(systemStatus.scheduledEnd)}\n\nThis will:\n• Cancel the scheduled maintenance\n• Clear the maintenance schedule\n• System will remain active\n\nClick OK to proceed.`
@@ -369,7 +368,7 @@ Type "DELETE COMPLETELY" to confirm:`;
 
     const stats = getSellerStats();
 
-    // ✅ Check if there's an active schedule
+    // Check if there's an active schedule
     const hasActiveSchedule = systemStatus.scheduledStart && systemStatus.scheduledEnd;
 
     return (
@@ -613,7 +612,7 @@ Type "DELETE COMPLETELY" to confirm:`;
                                     📅 Schedule Maintenance
                                 </button>
 
-                                {/* ✅ NEW: End Schedule Button - Only show if there's an active schedule */}
+                                {/* End Schedule Button - Only show if there's an active schedule */}
                                 {hasActiveSchedule && (
                                     <button
                                         onClick={handleEndScheduledMaintenance}

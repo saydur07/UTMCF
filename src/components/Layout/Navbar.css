@@ -67,14 +67,14 @@
   width: 100%;
 }
 
-/* ✅ Nav Right - Unified spacing and alignment */
+
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 8px; /* ✅ Consistent spacing between all icons */
+  gap: 8px;
 }
 
-/* ✅ Cart Icon - Unified styling */
+
 .cart-icon-container {
   position: relative;
   color: #333;
@@ -118,26 +118,26 @@
   animation: pulse 2s infinite;
 }
 
-/* ✅ Chat Icon - Same styling as cart icon */
+
 .chat-icon-container {
   position: relative;
-  color: #333; /* ✅ Same color as cart */
+  color: #333; 
   background: none;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px; /* ✅ Same padding as cart */
-  border-radius: 8px; /* ✅ Same border radius as cart */
-  transition: all 0.2s; /* ✅ Same transition as cart */
-  height: 40px; /* ✅ Same height as cart */
-  width: 40px;  /* ✅ Same width as cart */
+  padding: 8px; 
+  border-radius: 8px; 
+  transition: all 0.2s;
+  height: 40px; 
+  width: 40px;  
 }
 
 .chat-icon-container:hover {
-  color: #3a86ff; /* ✅ Same hover color as cart */
-  background: rgba(58, 134, 255, 0.1); /* ✅ Same hover background as cart */
+  color: #3a86ff; 
+  background: rgba(58, 134, 255, 0.1); 
 }
 
 .chat-icon {
@@ -147,43 +147,43 @@
   justify-content: center;
 }
 
-/* ✅ Chat SVG - Forced visibility */
+
 .chat-icon svg {
   width: 24px;
   height: 24px;
-  stroke: #333 !important; /* ✅ Force dark stroke */
-  stroke-width: 2 !important; /* ✅ Standard thickness */
+  stroke: #333 !important; 
+  stroke-width: 2 !important;
   fill: none;
   transition: all 0.2s ease;
 }
 
 .chat-icon-container:hover .chat-icon svg {
-  stroke: #3a86ff !important; /* ✅ Blue on hover */
-  stroke-width: 2.5 !important; /* ✅ Slightly thicker on hover */
+  stroke: #3a86ff !important; 
+  stroke-width: 2.5 !important; 
 }
 
-/* ✅ Chat Badge - Same styling as cart badge */
+
 .chat-count {
   position: absolute;
   top: -8px;
   right: -8px;
-  background-color: #ff5a5f; /* ✅ Same background as cart */
+  background-color: #ff5a5f; 
   color: white;
-  border-radius: 50%; /* ✅ Same shape as cart */
-  width: 20px; /* ✅ Same size as cart */
-  height: 20px; /* ✅ Same size as cart */
+  border-radius: 50%; 
+  width: 20px;
+  height: 20px; 
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px; /* ✅ Same font size as cart */
-  font-weight: bold; /* ✅ Same font weight as cart */
-  animation: pulse 2s infinite; /* ✅ Same animation as cart */
+  font-size: 12px;
+  font-weight: bold; 
+  animation: pulse 2s infinite; 
 }
 
-/* ✅ User Avatar - Aligned with other icons */
+
 .avatar {
-  width: 40px;  /* ✅ Same size as other icons */
-  height: 40px; /* ✅ Same size as other icons */
+  width: 40px;  
+  height: 40px; 
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
@@ -191,7 +191,7 @@
   align-items: center;
   justify-content: center;
   background-color: #3a86ff;
-  margin-left: 8px; /* ✅ Consistent with gap */
+  margin-left: 8px; 
   transition: all 0.2s ease;
 }
 
@@ -212,16 +212,16 @@
   font-size: 16px;
 }
 
-/* ✅ Unified pulse animation */
+
 @keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
 
-/* ✅ Dropdown Badge - Consistent styling */
+
 .dropdown-badge {
-  background-color: #ff5a5f; /* ✅ Same as other badges */
+  background-color: #ff5a5f; 
   color: white;
   border-radius: 50%;
   width: 18px;
@@ -429,10 +429,10 @@
   /* Keep cart and chat visible on mobile */
   .nav-right {
     display: flex;
-    gap: 6px; /* ✅ Smaller gap on mobile */
+    gap: 6px; 
   }
   
-  /* ✅ Mobile icon adjustments - unified sizing */
+
   .cart-icon-container,
   .chat-icon-container {
     height: 36px;
@@ -455,7 +455,7 @@
     right: -6px;
   }
   
-  /* ✅ Mobile avatar adjustment */
+
   .avatar {
     width: 36px;
     height: 36px;

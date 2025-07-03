@@ -448,7 +448,7 @@
   white-space: pre-wrap;
 }
 
-/* ✅ Image Attachment Styles */
+
 .message-attachments {
   margin-top: 15px;
   display: flex;
@@ -530,7 +530,7 @@
   opacity: 1;
 }
 
-/* ✅ Image Modal */
+
 .image-modal {
   position: fixed;
   top: 0;

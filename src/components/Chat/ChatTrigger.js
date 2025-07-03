@@ -1,4 +1,4 @@
-// src/components/Chat/ChatTrigger.js - Floating chat button
+// src/components/Chat/ChatTrigger.js
 import React from 'react';
 import { useChat } from '../../context/ChatContext';
 import './ChatTrigger.css';

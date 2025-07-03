@@ -39,9 +39,9 @@ import Orders from './components/Pages/Orders';
 import SellerOrderManagement from './components/Pages/SellerOrderManagement';
 import OrderChat from './components/Payment/OrderChat';
 
-// ✅ Import chat components
+//  Import chat components
 import ChatSidebar from './components/Chat/ChatSidebar';
-import ChatTrigger from './components/Chat/ChatTrigger'; // ✅ NEW
+import ChatTrigger from './components/Chat/ChatTrigger';
 
 // Import contexts
 import { CartProvider } from './context/CartContext';
@@ -152,7 +152,7 @@ const App = () => {
             <CampaignProvider>
                 <ChatProvider>
                     <Router>
-                        {/* ✅ Admin icon for ALL pages - OUTSIDE the routes */}
+                        {/* Admin icon for ALL pages - OUTSIDE the routes */}
                         {!isAdmin && !showAdminLogin && (
                             <div
                                 onClick={toggleAdminLogin}
@@ -237,7 +237,7 @@ const App = () => {
                                                 </Routes>
                                             </main>
 
-                                            {/* ✅ Chat Components - Only when user is logged in */}
+                                            {/* Chat Components - Only when user is logged in */}
                                             {user && (
                                                 <>
                                                     <ChatTrigger />

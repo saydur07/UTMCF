@@ -13,7 +13,7 @@ const QuickChat = ({ conversation, onBack, onViewFull }) => {
     const user = auth.currentUser;
     const hasMarkedAsRead = useRef(false);
 
-    // ✅ Set up real-time listener for this specific order
+    // Set up real-time listener for this specific order
     useEffect(() => {
         if (!conversation?.orderId) return;
 
@@ -54,12 +54,12 @@ const QuickChat = ({ conversation, onBack, onViewFull }) => {
         };
     }, [conversation?.orderId]);
 
-    // ✅ Scroll to bottom when messages change
+    // Scroll to bottom when messages change
     useEffect(() => {
         scrollToBottom();
     }, [currentConversation.messages]);
 
-    // ✅ Mark messages as read when they're viewed (with debouncing)
+    // Mark messages as read when they're viewed (with debouncing)
     useEffect(() => {
         const markAsReadTimer = setTimeout(() => {
             if (!hasMarkedAsRead.current) {
@@ -124,17 +124,17 @@ const QuickChat = ({ conversation, onBack, onViewFull }) => {
                 senderType: currentConversation.userRole,
                 message: messageText,
                 timestamp: new Date(),
-                read: false // New messages start as unread
+                read: false
             };
 
-            // ✅ Optimistically update the UI first
+
             const optimisticConversation = {
                 ...currentConversation,
                 messages: [...currentConversation.messages, messageData]
             };
             setCurrentConversation(optimisticConversation);
 
-            // ✅ Then update Firestore
+
             await updateDoc(doc(db, 'orders', currentConversation.orderId), {
                 messages: arrayUnion(messageData),
                 lastUpdated: new Date()
@@ -142,17 +142,15 @@ const QuickChat = ({ conversation, onBack, onViewFull }) => {
 
             console.log('✅ QuickChat: Message sent successfully');
 
-            // Reset read marking flag since we just sent a message
+
             hasMarkedAsRead.current = false;
 
         } catch (error) {
             console.error('❌ QuickChat: Error sending message:', error);
             alert('Failed to send message. Please try again.');
 
-            // ✅ Restore message in input if failed
             setNewMessage(messageText);
 
-            // ✅ Revert optimistic update if failed
             setCurrentConversation(conversation);
         } finally {
             setSending(false);
@@ -180,7 +178,7 @@ const QuickChat = ({ conversation, onBack, onViewFull }) => {
         })}`;
     };
 
-    // ✅ Check if this is an offer conversation and user is seller
+    //  Check if this is an offer conversation and user is seller
     const isOfferConversation = currentConversation.type === 'offer';
     const isSellerInOffer = isOfferConversation && currentConversation.userRole === 'seller';
     const isOfferPending = currentConversation.status === 'offer_pending';

@@ -160,14 +160,14 @@ export const CartProvider = ({ children }) => {
         }
     };
 
-    // ✅ Get total number of items in cart (including offers)
+    // Get total number of items in cart (including offers)
     const getCartCount = () => {
         const cartCount = cart.reduce((total, item) => total + (item.quantity || 0), 0);
         const offersCount = acceptedOffers.length;
         return cartCount + offersCount;
     };
 
-    // ✅ Get regular cart total (without offers) - SEPARATE CALCULATION
+    // Get regular cart total (without offers) - SEPARATE CALCULATION
     const getRegularCartTotal = () => {
         const total = cart.reduce((total, item) => {
             const itemPrice = parseFloat(item.price) || 0;
@@ -179,7 +179,7 @@ export const CartProvider = ({ children }) => {
         return total;
     };
 
-    // ✅ Get accepted offers total - SEPARATE CALCULATION
+    // Get accepted offers total - SEPARATE CALCULATION
     const getAcceptedOffersTotal = () => {
         const total = acceptedOffers.reduce((total, offer) => {
             const offerAmount = parseFloat(offer.offerAmount) || 0;
@@ -191,7 +191,7 @@ export const CartProvider = ({ children }) => {
         return total;
     };
 
-    // ✅ CRITICAL: Main function to calculate total price (cart + offers) - FIXED
+    //  Main function to calculate total price (cart + offers) - FIXED
     const getTotalPrice = () => {
         const cartTotal = getRegularCartTotal();
         const offersTotal = getAcceptedOffersTotal();
@@ -205,7 +205,7 @@ export const CartProvider = ({ children }) => {
         return combinedTotal;
     };
 
-    // ✅ CRITICAL: Alias for getTotalPrice - FIXED
+    //  Alias for getTotalPrice - FIXED
     const getCartTotal = () => {
         console.log('🧮 getCartTotal called - calculating total...');
         const total = getTotalPrice();
@@ -213,7 +213,7 @@ export const CartProvider = ({ children }) => {
         return total;
     };
 
-    // ✅ Get formatted total price
+    // Get formatted total price
     const getFormattedTotal = () => {
         const total = getTotalPrice();
         return `RM ${total.toLocaleString('en-MY', {
@@ -222,12 +222,12 @@ export const CartProvider = ({ children }) => {
         })}`;
     };
 
-    // ✅ Check if cart is empty (including offers)
+    //  Check if cart is empty (including offers)
     const isCartEmpty = () => {
         return cart.length === 0 && acceptedOffers.length === 0;
     };
 
-    // ✅ Get cart summary with all info
+    // Get cart summary with all info
     const getCartSummary = () => {
         const totalItems = getCartCount();
         const totalPrice = getTotalPrice();
@@ -249,23 +249,23 @@ export const CartProvider = ({ children }) => {
         };
     };
 
-    // ✅ Get item by ID
+    // Get item by ID
     const getCartItem = (itemId) => {
         return cart.find(item => item.id === itemId);
     };
 
-    // ✅ Check if item exists in cart
+    // Check if item exists in cart
     const isInCart = (itemId) => {
         return cart.some(item => item.id === itemId);
     };
 
-    // ✅ Get quantity of specific item
+    // Get quantity of specific item
     const getItemQuantity = (itemId) => {
         const item = getCartItem(itemId);
         return item ? item.quantity : 0;
     };
 
-    // ✅ Update item details (price, name, etc.)
+    // Update item details (price, name, etc.)
     const updateCartItem = (itemId, updates) => {
         setCart(prevCart =>
             prevCart.map(item =>
@@ -277,14 +277,14 @@ export const CartProvider = ({ children }) => {
         console.log('🔄 Cart item updated:', itemId, updates);
     };
 
-    // ✅ Get subtotal for specific item
+    // Get subtotal for specific item
     const getItemSubtotal = (itemId) => {
         const item = getCartItem(itemId);
         if (!item) return 0;
         return parseFloat(item.price || 0) * parseInt(item.quantity || 0);
     };
 
-    // ✅ Get items grouped by seller (including offers)
+    // Get items grouped by seller (including offers)
     const getItemsBySeller = () => {
         const sellerGroups = {};
 
@@ -333,19 +333,19 @@ export const CartProvider = ({ children }) => {
         return sellerGroups;
     };
 
-    // ✅ Calculate tax (if needed)
+    // Calculate tax (if needed)
     const calculateTax = (taxRate = 0.06) => {
         return getTotalPrice() * taxRate;
     };
 
-    // ✅ Calculate grand total with tax
+    // Calculate grand total with tax
     const getGrandTotal = (taxRate = 0.06) => {
         const subtotal = getTotalPrice();
         const tax = calculateTax(taxRate);
         return subtotal + tax;
     };
 
-    // ✅ CRITICAL: Export all functions with clear separation
+    // Export all functions with clear separation
     const value = {
         // State
         cart,

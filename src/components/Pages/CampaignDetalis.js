@@ -66,7 +66,7 @@ function CampaignDetails() {
         setShowQRPayment(true);
     };
 
-    // ✅ Updated success handler for new payment system
+    //  Updated success handler for new payment system
     const handlePaymentSuccess = async (paymentInfo) => {
         console.log('🎉 Donation payment success:', paymentInfo);
 
@@ -212,7 +212,7 @@ function CampaignDetails() {
                             <p>{campaign.description}</p>
                         </div>
 
-                        {/* ✅ Updated donations display - Show verified donations only */}
+                        {/* Updated donations display - Show verified donations only */}
                         {campaign.donations && campaign.donations.length > 0 && (
                             <div className="recent-donations">
                                 <h3>Recent Donations</h3>
@@ -259,7 +259,7 @@ function CampaignDetails() {
                             <p>Help us reach our target</p>
                         </div>
 
-                        {/* ✅ Updated progress display */}
+                        {/* Updated progress display */}
                         <div className="progress-section">
                             <div className="progress-bar">
                                 <div
@@ -299,7 +299,7 @@ function CampaignDetails() {
                             </div>
                         )}
 
-                        {/* ✅ Updated donation button */}
+                        {/* Updated donation button */}
                         {!isCreator && campaign.status === 'active' && (
                             <div className="donation-actions">
                                 {hasValidQRCodes ? (
@@ -333,7 +333,7 @@ function CampaignDetails() {
                                     </div>
                                 )}
 
-                                {/* ✅ Quick access to messages for pending donations */}
+                                {/* Quick access to messages for pending donations */}
                                 <div className="creator-messages">
                                     <h4>📧 Donation Messages</h4>
                                     <p>Check your messages for donation receipts to verify</p>
@@ -353,7 +353,7 @@ function CampaignDetails() {
                 </div>
             </div>
 
-            {/* ✅ Updated QR Payment Modal */}
+            {/* Updated QR Payment Modal */}
             {showQRPayment && (
                 <CampaignQRPayment
                     campaign={campaign}
@@ -362,7 +362,7 @@ function CampaignDetails() {
                 />
             )}
 
-            {/* ✅ Updated Payment Success Modal */}
+            {/* Updated Payment Success Modal */}
             {showPaymentSuccess && paymentData && (
                 <CampaignPaymentSuccess
                     paymentData={paymentData}

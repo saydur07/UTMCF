@@ -110,7 +110,7 @@ const QRPayment = ({ campaign, onClose, onPaymentSuccess }) => {
                 </div>
 
                 <div className="qr-payment-body">
-                    {/* ✅ Amount Selection */}
+                    {/* Amount Selection */}
                     <div className="amount-selection">
                         <h3>Select Donation Amount</h3>
                         <div className="predefined-amounts">
@@ -139,7 +139,7 @@ const QRPayment = ({ campaign, onClose, onPaymentSuccess }) => {
                         </div>
                     </div>
 
-                    {/* ✅ Payment Method Selection */}
+                    {/* Payment Method Selection */}
                     {validQRCodes.length > 1 && (
                         <div className="payment-method-selection">
                             <h3>Select Payment Method</h3>
@@ -161,13 +161,13 @@ const QRPayment = ({ campaign, onClose, onPaymentSuccess }) => {
                         </div>
                     )}
 
-                    {/* ✅ QR Code Display - RESTRUCTURED */}
+                    {/* QR Code Display - RESTRUCTURED */}
                     {donationAmount && (
                         <div className="qr-display">
-                            {/* ✅ MOVED: Title above QR code */}
+                            {/* Title above QR code */}
                             <h3>Scan QR Code to Pay</h3>
 
-                            {/* ✅ QR Code and Bank Details */}
+                            {/*  QR Code and Bank Details */}
                             <div className="qr-code-container">
                                 <img
                                     src={validQRCodes[selectedQR].imageUrl}
@@ -190,7 +190,7 @@ const QRPayment = ({ campaign, onClose, onPaymentSuccess }) => {
                         </div>
                     )}
 
-                    {/* ✅ SEPARATED: Payment Instructions */}
+                    {/* SEPARATE Payment Instructions */}
                     {donationAmount && (
                         <div className="payment-instructions">
                             <h4>How to pay:</h4>
@@ -204,7 +204,7 @@ const QRPayment = ({ campaign, onClose, onPaymentSuccess }) => {
                         </div>
                     )}
 
-                    {/* ✅ SEPARATED: Payment Actions at Bottom */}
+                    {/* Payment Actions at Bottom */}
                     {donationAmount && (
                         <div className="payment-actions">
                             <button

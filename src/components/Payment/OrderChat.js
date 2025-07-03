@@ -3,8 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, updateDoc, arrayUnion, onSnapshot, increment } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
-import DonationVerification from '../Payment/DonationVerification'; // ✅ Existing donation verification
-import OfferResponseCard from '../Chat/OfferResponseCard'; // ✅ NEW: Import offer response
+import DonationVerification from '../Payment/DonationVerification';
+import OfferResponseCard from '../Chat/OfferResponseCard';
 import './OrderChat.css';
 
 const OrderChat = () => {
@@ -40,7 +40,7 @@ const OrderChat = () => {
                     const orderData = { id: docSnapshot.id, ...docSnapshot.data() };
                     console.log('📨 Order chat updated:', orderData.messages?.length, 'messages');
 
-                    // ✅ Enhanced user type determination for donations AND offers
+                    // Enhanced user type determination for donations AND offers
                     if (orderData.buyerId === user.uid) {
                         if (orderData.orderType === 'donation') {
                             setUserType('donor');
@@ -177,12 +177,11 @@ const OrderChat = () => {
 
     const getStatusColor = (status) => {
         const colors = {
-            // ✅ Offer statuses
+
             'offer_pending': '#ff9800',
             'offer_accepted': '#4caf50',
             'offer_rejected': '#f44336',
             'offer_countered': '#2196f3',
-            // Existing statuses
             'pending_verification': '#ff9800',
             'pending_payment': '#ff9800',
             'pending_meetup': '#2196f3',
@@ -197,7 +196,7 @@ const OrderChat = () => {
 
     const getStatusIcon = (status) => {
         const icons = {
-            // ✅ Offer statuses  
+            // Offer statuses  
             'offer_pending': '💰',
             'offer_accepted': '✅',
             'offer_rejected': '❌',
@@ -241,12 +240,12 @@ const OrderChat = () => {
         };
     }, [selectedImage]);
 
-    // ✅ Handle donation verification completion
+    // handle donation verification completion
     const handleVerificationComplete = (result) => {
         console.log('✅ Donation verification completed:', result);
     };
 
-    // ✅ NEW: Handle offer response completion  
+    //  Handle offer response completion  
     const handleOfferResponse = () => {
         console.log('✅ Offer response completed, order will auto-update');
         // Order updates will come through the real-time listener
@@ -256,7 +255,7 @@ const OrderChat = () => {
     const renderMessage = (message, index) => {
         const isOwnMessage = message.senderId === user.uid;
         const isSystemMessage = message.senderType === 'system';
-        // ✅ NEW: Check for offer message types
+        //  Check for offer message types
         const isOfferMessage = message.messageType === 'offer_notification' || message.messageType === 'offer_response';
 
         return (
@@ -379,7 +378,7 @@ const OrderChat = () => {
         );
     }
 
-    // ✅ Enhanced other party info for donations AND offers
+    //  Enhanced other party info for donations AND offers
     const getDynamicOtherParty = () => {
         if (userType === 'buyer' || userType === 'donor') {
             return {
@@ -400,7 +399,7 @@ const OrderChat = () => {
 
     const otherParty = getDynamicOtherParty();
 
-    // ✅ NEW: Check order types
+    // Check order types
     const isDonationOrder = order.orderType === 'donation';
     const isOfferOrder = order.type === 'offer';
     const isUserCampaignCreator = userType === 'campaign_creator';
@@ -419,7 +418,7 @@ const OrderChat = () => {
                         ← Back
                     </button>
                     <div className="order-info">
-                        {/* ✅ Enhanced header for offers, donations and regular orders */}
+                        {/* header for offers, donations and regular orders */}
                         <h1>
                             {isDonationOrder ? '💝 Donation' :
                                 isOfferOrder ? '💰 Offer' : '📦 Order'} #{order.id.slice(-8)}
@@ -437,7 +436,7 @@ const OrderChat = () => {
                                         isOfferOrder ? (order.offerAmount || order.totalAmount) :
                                             order.totalAmount
                                 )}
-                                {/* ✅ Show original price for offers */}
+                                {/*  Show original price for offers */}
                                 {isOfferOrder && order.originalPrice && (
                                     <span className="original-price">
                                         (was {formatCurrency(order.originalPrice)})
@@ -467,7 +466,7 @@ const OrderChat = () => {
                         <span className="party-email">{otherParty.email}</span>
                     </div>
 
-                    {/* ✅ Action buttons for regular orders, donations, and offers */}
+                    {/* Action buttons for regular orders, donations, and offers */}
                     {(userType === 'seller' || userType === 'campaign_creator') &&
                         order.status !== 'completed' &&
                         order.status !== 'cancelled' &&
@@ -497,7 +496,7 @@ const OrderChat = () => {
                 </div>
             </div>
 
-            {/* ✅ Donation Verification Component */}
+            {/* Donation Verification Component */}
             {isDonationOrder && isUserCampaignCreator && order.status === 'pending_verification' && (
                 <DonationVerification
                     order={order}
@@ -505,7 +504,7 @@ const OrderChat = () => {
                 />
             )}
 
-            {/* ✅ NEW: Offer Response Component */}
+            {/*  Offer Response Component */}
             {isOfferOrder && isUserSeller && isOfferPending && (
                 <div className="offer-response-section">
                     <OfferResponseCard
@@ -515,7 +514,7 @@ const OrderChat = () => {
                 </div>
             )}
 
-            {/* ✅ Enhanced Order/Donation/Offer Items Summary */}
+            {/* Enhanced Order/Donation/Offer Items Summary */}
             <div className="order-items-summary">
                 {isDonationOrder ? (
                     // Donation summary
@@ -536,7 +535,7 @@ const OrderChat = () => {
                         </div>
                     </>
                 ) : isOfferOrder ? (
-                    // ✅ NEW: Offer summary
+                    //  Offer summary
                     <>
                         <h3>💰 Offer Details</h3>
                         <div className="offer-summary">

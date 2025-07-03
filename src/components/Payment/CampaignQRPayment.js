@@ -91,7 +91,7 @@ const CampaignQRPayment = ({ campaign, onClose, onPaymentSuccess }) => {
         }
     };
 
-    // ✅ FIXED: Create donation order that integrates with existing chat system
+    // FIXED: Create donation order that integrates with existing chat system
     const createDonationOrder = async (donationData, receiptImageUrl) => {
         try {
             console.log('📧 Creating donation order for chat system...');
@@ -109,7 +109,7 @@ const CampaignQRPayment = ({ campaign, onClose, onPaymentSuccess }) => {
                 sellerName: campaign.creator.name || campaign.creator.email,
                 sellerEmail: campaign.creator.email,
 
-                // ✅ NEW: Mark this as a donation order
+                // NEW: Mark this as a donation order
                 orderType: 'donation', // This distinguishes it from marketplace orders
 
                 // Campaign information (instead of items)
@@ -147,7 +147,7 @@ const CampaignQRPayment = ({ campaign, onClose, onPaymentSuccess }) => {
                 createdAt: new Date(),
                 lastUpdated: new Date(),
 
-                // ✅ FIXED: Initial message with receipt for chat system
+                // FIXED: Initial message with receipt for chat system
                 messages: [
                     {
                         senderId: user.uid,
@@ -209,7 +209,7 @@ const CampaignQRPayment = ({ campaign, onClose, onPaymentSuccess }) => {
             setSubmitting(true);
             console.log('🔄 Starting donation submission process...');
 
-            // Step 1: Upload receipt image to Cloudinary
+            // Upload receipt image to Cloudinary
             console.log('📤 Step 1: Uploading receipt to Cloudinary...');
             let receiptImageUrl = null;
 
@@ -223,7 +223,7 @@ const CampaignQRPayment = ({ campaign, onClose, onPaymentSuccess }) => {
                 return;
             }
 
-            // Step 2: Create donation data with receipt
+            // Create donation data with receipt
             console.log('📝 Step 2: Creating donation data...');
             const donationData = {
                 amount: parseFloat(formData.donationAmount),
@@ -247,7 +247,7 @@ const CampaignQRPayment = ({ campaign, onClose, onPaymentSuccess }) => {
                 submittedAt: new Date()
             };
 
-            // Step 3: Update campaign with pending donation
+            // Update campaign with pending donation
             console.log('💾 Step 3: Adding donation to campaign...');
             const campaignRef = doc(db, 'campaigns', campaign.id);
 
@@ -258,11 +258,11 @@ const CampaignQRPayment = ({ campaign, onClose, onPaymentSuccess }) => {
                 lastDonation: new Date()
             });
 
-            // ✅ Step 4: Create donation order for chat system integration
+            //  Create donation order for chat system integration
             console.log('📧 Step 4: Creating donation order for chat system...');
             await createDonationOrder(donationData, receiptImageUrl);
 
-            // Step 5: Call success callback
+            // all success callback
             console.log('🎉 Step 5: Donation submitted successfully!');
 
             // Call the success callback with donation info

@@ -17,7 +17,7 @@ const ChatSidebar = () => {
     const [selectedConversation, setSelectedConversation] = useState(null);
     const [showQuickChat, setShowQuickChat] = useState(false);
 
-    // ✅ Update selected conversation when conversations change
+    // Update selected conversation when conversations change
     useEffect(() => {
         if (selectedConversation && conversations.length > 0) {
             // Find the updated version of the selected conversation

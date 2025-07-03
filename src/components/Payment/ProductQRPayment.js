@@ -65,7 +65,7 @@ const ProductQRPayment = () => {
         return cartTotal + offersTotal;
     };
 
-    // ✅ Fetch QR codes from products including accepted offers
+    // Fetch QR codes from products including accepted offers
     useEffect(() => {
         const fetchSellerQRCodes = async () => {
             console.log('🔍 Fetching QR codes for cart items and accepted offers...');
