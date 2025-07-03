@@ -1,4 +1,5 @@
-// src/components/Admin/AdminDashboard.js - UPDATED WITH BACKEND INTEGRATION
+/* eslint-disable react-hooks/exhaustive-deps */
+// src/components/Admin/AdminDashboard.js - UPDATED WITH END SCHEDULE BUTTON
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../../firebase';
@@ -23,7 +24,11 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
     const [backendStatus, setBackendStatus] = useState('checking');
 
     // Backend API URL
-    const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
+    const API_BASE_URL = process.env.NODE_ENV === 'production'
+        ? 'https://us-central1-utmcf-2f326.cloudfunctions.net'
+        : 'http://localhost:3001';
+
+
 
     useEffect(() => {
         checkBackendHealth();
@@ -106,7 +111,7 @@ const AdminDashboard = ({ adminUser, onLogout }) => {
     const handleCompleteDeleteUser = async (user) => {
         // Check backend connection first
         if (backendStatus !== 'connected') {
-            alert(`❌ Backend Server Not Available\n\nStatus: ${backendStatus}\n\nPlease:\n1. Make sure backend server is running\n2. Check http://localhost:3001/api/health\n3. Restart the backend server if needed\n\nCannot delete users without backend connection.`);
+            alert(`❌ Backend Server Not Available\n\nStatus: ${backendStatus}\n\nPlease:\n1. Make sure backend server is running\n2. Check the backend deployment\n3. Restart the backend server if needed\n\nCannot delete users without backend connection.`);
             return;
         }
 
@@ -183,7 +188,7 @@ Type "DELETE COMPLETELY" to confirm:`;
             console.error('❌ Error during complete user deletion:', error);
 
             if (error.message.includes('Failed to fetch')) {
-                alert(`❌ Cannot connect to backend server!\n\nPlease check:\n1. Backend server is running on port 3001\n2. Run: npm run dev in utmcf-backend folder\n3. Check http://localhost:3001/api/health\n\nError: ${error.message}`);
+                alert(`❌ Cannot connect to backend server!\n\nPlease check:\n1. Backend server is running\n2. Check the deployment status\n3. Verify API endpoints\n\nError: ${error.message}`);
             } else {
                 alert(`❌ Failed to completely delete user: ${error.message}\n\nThe user may still exist in Firebase Authentication.\nPlease check the backend server logs and try again.`);
             }
@@ -280,6 +285,52 @@ Type "DELETE COMPLETELY" to confirm:`;
         }
     };
 
+    // ✅ NEW: End scheduled maintenance function
+    const handleEndScheduledMaintenance = async () => {
+        const confirmEnd = window.confirm(
+            `🗑️ END SCHEDULED MAINTENANCE\n\nAre you sure you want to cancel the scheduled maintenance?\n\nScheduled: ${formatDate(systemStatus.scheduledStart)} - ${formatDate(systemStatus.scheduledEnd)}\n\nThis will:\n• Cancel the scheduled maintenance\n• Clear the maintenance schedule\n• System will remain active\n\nClick OK to proceed.`
+        );
+
+        if (!confirmEnd) {
+            return;
+        }
+
+        try {
+            const updateData = {
+                isUnderMaintenance: false,
+                isScheduled: false,
+                scheduledStart: null,
+                scheduledEnd: null,
+                lastUpdated: new Date(),
+                updatedBy: adminUser.email,
+                maintenanceMessage: maintenanceForm.message // Keep the message for future use
+            };
+
+            await setDoc(doc(db, 'system', 'maintenance'), updateData, { merge: true });
+
+            setSystemStatus(prev => ({
+                ...prev,
+                ...updateData,
+                scheduledStart: '',
+                scheduledEnd: ''
+            }));
+
+            // Clear the form
+            setMaintenanceForm(prev => ({
+                ...prev,
+                startDateTime: '',
+                endDateTime: ''
+            }));
+
+            alert('✅ Scheduled maintenance cancelled successfully!\n\nThe system will remain active and the maintenance schedule has been cleared.');
+
+            console.log('🗑️ Scheduled maintenance ended by admin');
+        } catch (error) {
+            console.error('Error ending scheduled maintenance:', error);
+            alert('❌ Failed to end scheduled maintenance: ' + error.message);
+        }
+    };
+
     const formatDate = (date) => {
         if (!date || date === 'Never') return 'Never';
         return new Date(date).toLocaleDateString('en-MY', {
@@ -317,6 +368,9 @@ Type "DELETE COMPLETELY" to confirm:`;
     };
 
     const stats = getSellerStats();
+
+    // ✅ Check if there's an active schedule
+    const hasActiveSchedule = systemStatus.scheduledStart && systemStatus.scheduledEnd;
 
     return (
         <div className="admin-dashboard">
@@ -377,13 +431,13 @@ Type "DELETE COMPLETELY" to confirm:`;
                                 <p>New (7 days)</p>
                             </div>
                         </div>
-                        <div className="stat-card">
+                        {/* <div className="stat-card">
                             <div className="stat-icon">🔐</div>
                             <div className="stat-info">
                                 <h3>{stats.verifiedSellers}</h3>
                                 <p>Verified</p>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="sellers-table-container">
@@ -554,16 +608,58 @@ Type "DELETE COMPLETELY" to confirm:`;
                                 </div>
                             </div>
 
-                            <button onClick={handleScheduleMaintenance} className="schedule-btn">
-                                📅 Schedule Maintenance
-                            </button>
+                            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                <button onClick={handleScheduleMaintenance} className="schedule-btn">
+                                    📅 Schedule Maintenance
+                                </button>
+
+                                {/* ✅ NEW: End Schedule Button - Only show if there's an active schedule */}
+                                {hasActiveSchedule && (
+                                    <button
+                                        onClick={handleEndScheduledMaintenance}
+                                        className="end-schedule-btn"
+                                        style={{
+                                            backgroundColor: '#dc3545',
+                                            color: 'white',
+                                            border: 'none',
+                                            padding: '12px 20px',
+                                            borderRadius: '8px',
+                                            cursor: 'pointer',
+                                            fontSize: '14px',
+                                            fontWeight: '600',
+                                            transition: 'all 0.3s ease'
+                                        }}
+                                        onMouseOver={(e) => {
+                                            e.target.style.backgroundColor = '#c82333';
+                                        }}
+                                        onMouseOut={(e) => {
+                                            e.target.style.backgroundColor = '#dc3545';
+                                        }}
+                                    >
+                                        🗑️ End Scheduled Maintenance
+                                    </button>
+                                )}
+                            </div>
                         </div>
 
-                        {systemStatus.scheduledStart && systemStatus.scheduledEnd && (
-                            <div className="scheduled-info">
-                                <h4>📋 Scheduled Maintenance:</h4>
-                                <p>Start: {formatDate(systemStatus.scheduledStart)}</p>
-                                <p>End: {formatDate(systemStatus.scheduledEnd)}</p>
+                        {hasActiveSchedule && (
+                            <div className="scheduled-info" style={{
+                                backgroundColor: '#fff3cd',
+                                border: '1px solid #ffeaa7',
+                                borderRadius: '8px',
+                                padding: '15px',
+                                marginTop: '15px'
+                            }}>
+                                <h4 style={{ margin: '0 0 10px 0', color: '#856404' }}>📋 Active Scheduled Maintenance:</h4>
+                                <p style={{ margin: '5px 0', color: '#856404' }}>
+                                    <strong>Start:</strong> {formatDate(systemStatus.scheduledStart)}
+                                </p>
+                                <p style={{ margin: '5px 0', color: '#856404' }}>
+                                    <strong>End:</strong> {formatDate(systemStatus.scheduledEnd)}
+                                </p>
+                                <p style={{ margin: '10px 0 0 0', fontSize: '0.9rem', color: '#6c757d' }}>
+                                    💡 Use "End Scheduled Maintenance" button above to cancel this schedule
+                                </p>
                             </div>
                         )}
                     </div>

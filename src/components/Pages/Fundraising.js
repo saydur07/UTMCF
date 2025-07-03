@@ -12,7 +12,7 @@ function Fundraising() {
     const [filter, setFilter] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const user = auth.currentUser;
-    const { getCampaignProgress, isCampaignGoalReached, getDaysRemaining } = useCampaign();
+    const { getDaysRemaining } = useCampaign();
 
     const fetchCampaigns = async () => {
         try {
@@ -127,12 +127,6 @@ function Fundraising() {
                     {filteredCampaigns.length > 0 ? (
                         <div className="campaigns-grid">
                             {filteredCampaigns.map(campaign => {
-                                // Calculate progress safely without context
-                                const currentAmount = campaign.currentAmount || 0;
-                                const goalAmount = campaign.goalAmount || 1;
-                                const progress = Math.min((currentAmount / goalAmount) * 100, 100);
-                                const goalReached = currentAmount >= goalAmount;
-
                                 // Calculate days remaining safely
                                 let daysRemaining = null;
                                 if (campaign.endDate) {
@@ -150,11 +144,6 @@ function Fundraising() {
                                                 <img src={campaign.images[0]} alt={campaign.title} />
                                             ) : (
                                                 <div className="no-image">No Image</div>
-                                            )}
-                                            {goalReached && (
-                                                <div className="goal-reached-badge">
-                                                    Goal Reached!
-                                                </div>
                                             )}
                                         </div>
 
@@ -174,24 +163,14 @@ function Fundraising() {
                                                     : campaign.description}
                                             </p>
 
-                                            <div className="progress-section">
-                                                <div className="progress-bar">
-                                                    <div
-                                                        className="progress-fill"
-                                                        style={{ width: `${progress}%` }}
-                                                    ></div>
-                                                </div>
-                                                <div className="progress-text">
-                                                    <span className="current-amount">
-                                                        {formatCurrency(campaign.currentAmount || 0)}
-                                                    </span>
-                                                    <span className="goal-amount">
-                                                        of {formatCurrency(campaign.goalAmount)}
+                                            <div className="goal-section">
+                                                <div className="goal-amount-display">
+                                                    <span className="goal-label">Goal:</span>
+                                                    <span className="goal-value">
+                                                        {formatCurrency(campaign.goalAmount)}
                                                     </span>
                                                 </div>
                                                 <div className="campaign-stats">
-                                                    <span>{campaign.donationCount || 0} donors</span>
-                                                    <span>{progress.toFixed(1)}% funded</span>
                                                     {daysRemaining !== null && (
                                                         <span>
                                                             {daysRemaining > 0

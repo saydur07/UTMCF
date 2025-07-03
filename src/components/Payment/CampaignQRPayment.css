@@ -1,0 +1,446 @@
+/* src/components/Payment/CampaignQRPayment.css */
+
+.campaign-qr-payment-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.campaign-qr-payment-modal {
+    background: white;
+    border-radius: 12px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Header Styles */
+.qr-header,
+.receipt-header {
+    padding: 24px 24px 16px 24px;
+    border-bottom: 1px solid #e0e0e0;
+    position: relative;
+}
+
+.qr-header h2,
+.receipt-header h2 {
+    margin: 0 0 8px 0;
+    color: #1976d2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.qr-header p,
+.receipt-header p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+/* QR Code Display */
+.campaign-qr-section {
+    padding: 24px;
+}
+
+.qr-code-display {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    padding: 20px;
+    border: 2px solid #e3f2fd;
+    border-radius: 12px;
+    background: #fafafa;
+    margin-bottom: 16px;
+}
+
+.qr-image-container {
+    flex-shrink: 0;
+}
+
+.qr-image {
+    width: 180px;
+    height: 180px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    object-fit: contain;
+    background: white;
+}
+
+.qr-fallback {
+    width: 180px;
+    height: 180px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #666;
+    background: #f9f9f9;
+}
+
+.qr-details h4 {
+    margin: 0 0 12px 0;
+    color: #1976d2;
+    font-size: 18px;
+}
+
+.qr-details p {
+    margin: 4px 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.no-qr-codes {
+    text-align: center;
+    padding: 40px 20px;
+    background: #fff3e0;
+    border-radius: 8px;
+    border: 1px solid #ffcc02;
+}
+
+.no-qr-codes span {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.no-qr-codes h3 {
+    color: #f57c00;
+    margin: 0 0 8px 0;
+}
+
+/* Campaign Info Summary */
+.campaign-info-summary {
+    padding: 0 24px 16px 24px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.campaign-info-summary h3 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.info-row span:first-child {
+    color: #666;
+}
+
+.info-row span:last-child {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Payment Instructions */
+.payment-instructions {
+    padding: 16px 24px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.payment-instructions h3 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.payment-instructions ol {
+    margin: 0;
+    padding-left: 20px;
+    color: #555;
+}
+
+.payment-instructions li {
+    margin-bottom: 6px;
+    font-size: 14px;
+}
+
+/* Receipt Upload */
+.receipt-upload-section {
+    padding: 24px;
+}
+
+.upload-area {
+    border: 2px dashed #ccc;
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fafafa;
+}
+
+.upload-area:hover {
+    border-color: #1976d2;
+    background: #f5f5f5;
+}
+
+.upload-placeholder .upload-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.upload-placeholder h3 {
+    margin: 0 0 8px 0;
+    color: #333;
+}
+
+.upload-placeholder p {
+    margin: 0 0 8px 0;
+    color: #666;
+}
+
+.upload-placeholder small {
+    color: #999;
+    font-size: 12px;
+}
+
+.receipt-preview {
+    position: relative;
+    display: inline-block;
+}
+
+.receipt-preview img {
+    max-width: 300px;
+    max-height: 200px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.receipt-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    color: white;
+    font-size: 14px;
+}
+
+.receipt-preview:hover .receipt-overlay {
+    opacity: 1;
+}
+
+/* Form Styles */
+.donation-form {
+    padding: 0 24px 16px 24px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #1976d2;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+}
+
+.form-group input[readonly] {
+    background: #f5f5f5;
+    color: #666;
+}
+
+/* Donation Summary */
+.donation-summary {
+    padding: 0 24px 16px 24px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.donation-summary h3 {
+    margin: 0 0 12px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.summary-content {
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.summary-row:last-child {
+    margin-bottom: 0;
+}
+
+.summary-row span:first-child {
+    color: #666;
+}
+
+.summary-row span:last-child {
+    color: #333;
+    font-weight: 500;
+}
+
+.donation-amount {
+    color: #1976d2 !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+}
+
+/* Action Buttons */
+.action-buttons {
+    padding: 24px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    background: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+}
+
+.back-btn,
+.donated-btn,
+.submit-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-btn {
+    background: #f5f5f5;
+    color: #666;
+}
+
+.back-btn:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.donated-btn,
+.submit-btn {
+    background: #1976d2;
+    color: white;
+}
+
+.donated-btn:hover,
+.submit-btn:hover {
+    background: #1565c0;
+}
+
+.donated-btn:disabled,
+.submit-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .campaign-qr-payment-overlay {
+        padding: 10px;
+    }
+    
+    .campaign-qr-payment-modal {
+        max-height: 95vh;
+    }
+    
+    .qr-code-display {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .qr-header,
+    .receipt-header {
+        padding: 20px 16px 16px 16px;
+    }
+    
+    .campaign-qr-section,
+    .receipt-upload-section,
+    .donation-form {
+        padding: 16px;
+    }
+}

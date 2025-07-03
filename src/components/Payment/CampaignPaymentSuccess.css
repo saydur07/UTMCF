@@ -1,0 +1,406 @@
+/* src/components/Payment/CampaignPaymentSuccess.css */
+
+.campaign-payment-success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.campaign-payment-success-modal {
+    background: white;
+    border-radius: 16px;
+    max-width: 550px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Success Header */
+.success-header {
+    text-align: center;
+    padding: 32px 32px 24px 32px;
+    background: linear-gradient(135deg, #4caf50, #2e7d32);
+    color: white;
+    border-radius: 16px 16px 0 0;
+}
+
+.success-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    display: block;
+    animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+    0%, 20%, 60%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    80% {
+        transform: translateY(-5px);
+    }
+}
+
+.success-header h2 {
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.success-header p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 16px;
+}
+
+/* Success Content */
+.success-content {
+    padding: 24px 32px;
+}
+
+/* Donation Details */
+.donation-details {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    border: 1px solid #e9ecef;
+}
+
+.donation-details h3 {
+    margin: 0 0 16px 0;
+    color: #333;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.detail-row span:first-child {
+    color: #666;
+    font-weight: 500;
+    min-width: 120px;
+}
+
+.detail-row span:last-child {
+    color: #333;
+    text-align: right;
+    flex: 1;
+}
+
+.detail-row .amount {
+    color: #4caf50 !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+}
+
+.detail-row .message {
+    font-style: italic;
+    color: #555;
+    max-width: 250px;
+    word-wrap: break-word;
+}
+
+.detail-row .status {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.status.pending {
+    background: #fff3e0;
+    color: #f57c00;
+    border: 1px solid #ffcc02;
+}
+
+/* What Happens Next */
+.what-happens-next {
+    margin-bottom: 24px;
+}
+
+.what-happens-next h3 {
+    margin: 0 0 16px 0;
+    color: #333;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.step-number {
+    width: 32px;
+    height: 32px;
+    background: #1976d2;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.step-content h4 {
+    margin: 0 0 6px 0;
+    color: #333;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.step-content p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Important Note */
+.important-note,
+.receipt-info {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.important-note {
+    background: #fff3e0;
+    border: 1px solid #ffcc02;
+}
+
+.receipt-info {
+    background: #e3f2fd;
+    border: 1px solid #2196f3;
+}
+
+.note-icon,
+.receipt-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.note-content h4,
+.receipt-content h4 {
+    margin: 0 0 6px 0;
+    color: #333;
+    font-size: 15px;
+}
+
+.note-content p,
+.receipt-content p {
+    margin: 0;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Action Buttons */
+.success-actions {
+    padding: 0 32px 24px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.primary-btn,
+.secondary-btn,
+.tertiary-btn {
+    padding: 14px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.primary-btn {
+    background: #4caf50;
+    color: white;
+}
+
+.primary-btn:hover {
+    background: #45a049;
+    transform: translateY(-1px);
+}
+
+.secondary-btn {
+    background: #1976d2;
+    color: white;
+}
+
+.secondary-btn:hover {
+    background: #1565c0;
+    transform: translateY(-1px);
+}
+
+.tertiary-btn {
+    background: #f5f5f5;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+.tertiary-btn:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+/* Thank You Message */
+.thank-you-message {
+    text-align: center;
+    padding: 24px 32px 32px 32px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 0 0 16px 16px;
+    border-top: 1px solid #dee2e6;
+}
+
+.thank-you-message h3 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.thank-you-message p {
+    margin: 0;
+    color: #666;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .campaign-payment-success-overlay {
+        padding: 10px;
+    }
+    
+    .campaign-payment-success-modal {
+        max-height: 95vh;
+    }
+    
+    .success-header {
+        padding: 24px 20px 20px 20px;
+    }
+    
+    .success-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+    }
+    
+    .success-header h2 {
+        font-size: 20px;
+    }
+    
+    .success-content {
+        padding: 20px;
+    }
+    
+    .donation-details {
+        padding: 16px;
+    }
+    
+    .detail-row {
+        flex-direction: column;
+        gap: 4px;
+        align-items: flex-start;
+    }
+    
+    .detail-row span:first-child {
+        min-width: auto;
+        font-weight: 600;
+    }
+    
+    .detail-row span:last-child {
+        text-align: left;
+    }
+    
+    .step {
+        gap: 12px;
+    }
+    
+    .step-number {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    
+    .success-actions {
+        padding: 0 20px 20px 20px;
+    }
+    
+    .thank-you-message {
+        padding: 20px;
+    }
+    
+    .thank-you-message h3 {
+        font-size: 18px;
+    }
+}

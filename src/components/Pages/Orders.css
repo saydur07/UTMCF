@@ -1,0 +1,365 @@
+/* src/components/Pages/Orders.css */
+.orders-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  .orders-header {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .orders-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .orders-header p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+  }
+  
+  .orders-filters {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .filter-select {
+    padding: 0.75rem 1rem;
+    border: 2px solid #e1e8ed;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.3s;
+  }
+  
+  .filter-select:focus {
+    outline: none;
+    border-color: #3498db;
+  }
+  
+  .loading {
+    text-align: center;
+    padding: 3rem;
+    color: #7f8c8d;
+    font-size: 1.1rem;
+  }
+  
+  .no-orders {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e1e8ed;
+  }
+  
+  .no-orders h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .no-orders p {
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+  }
+  
+  .browse-products-btn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .browse-products-btn:hover {
+    background: linear-gradient(135deg, #2980b9, #1f5f99);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+    color: white;
+  }
+  
+  .orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .order-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e1e8ed;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  
+  .order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e1e8ed;
+  }
+  
+  .order-info h3 {
+    color: #2c3e50;
+    margin: 0 0 0.25rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  
+  .order-date {
+    color: #7f8c8d;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  
+  .status-badge {
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .order-seller {
+    padding: 1rem 1.5rem;
+    color: #2c3e50;
+    font-size: 0.95rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e1e8ed;
+  }
+  
+  .order-items {
+    padding: 1.5rem;
+  }
+  
+  .order-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e1e8ed;
+  }
+  
+  .order-item:last-child {
+    border-bottom: none;
+  }
+  
+  .item-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #f8f9fa;
+  }
+  
+  .item-details {
+    flex: 1;
+  }
+  
+  .item-details h4 {
+    color: #2c3e50;
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .item-details p {
+    color: #7f8c8d;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  
+  .item-total {
+    color: #27ae60;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e1e8ed;
+  }
+  
+  .order-total {
+    color: #2c3e50;
+    font-size: 1.125rem;
+  }
+  
+  .order-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .payment-method {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .chat-button {
+    padding: 0.75rem 1.25rem;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .chat-button:hover {
+    background: linear-gradient(135deg, #2980b9, #1f5f99);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+  }
+  
+  /* Meetup and Payment Details */
+  .meetup-details,
+  .payment-details {
+    padding: 1.5rem;
+    background: #fff3cd;
+    border-top: 1px solid #ffeaa7;
+  }
+  
+  .meetup-details h4,
+  .payment-details h4 {
+    color: #856404;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .meetup-info,
+  .payment-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .meetup-info p,
+  .payment-info p {
+    color: #856404;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  
+  .meetup-info strong,
+  .payment-info strong {
+    color: #6c5400;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .orders-container {
+      margin: 1rem auto;
+      padding: 0 0.5rem;
+    }
+  
+    .orders-header h1 {
+      font-size: 2rem;
+    }
+  
+    .order-header {
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+      padding: 1rem;
+    }
+  
+    .order-footer {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: stretch;
+      text-align: center;
+    }
+  
+    .order-actions {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  
+    .order-item {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+    }
+  
+    .item-image {
+      width: 80px;
+      height: 80px;
+    }
+  
+    .order-items {
+      padding: 1rem;
+    }
+  
+    .meetup-details,
+    .payment-details {
+      padding: 1rem;
+    }
+  
+    .meetup-info,
+    .payment-info {
+      gap: 0.75rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .orders-header h1 {
+      font-size: 1.75rem;
+    }
+  
+    .order-header,
+    .order-footer,
+    .order-items {
+      padding: 0.75rem;
+    }
+  
+    .order-seller {
+      padding: 0.75rem;
+    }
+  
+    .chat-button {
+      width: 100%;
+      padding: 1rem;
+    }
+  
+    .order-actions {
+      flex-direction: column;
+      width: 100%;
+    }
+  
+    .payment-method {
+      text-align: center;
+    }
+  }

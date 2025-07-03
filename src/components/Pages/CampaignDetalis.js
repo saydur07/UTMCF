@@ -1,11 +1,11 @@
-// src/components/Pages/CampaignDetails.js
+// src/components/Pages/CampaignDetails.js - Updated to use new payment system
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { db, auth } from '../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useCampaign } from '../../context/CampaignContext';
-import StripePaymentForm from '../Payment/StripePaymentForm';
-import PaymentSuccess from '../Payment/PaymentSuccess';
+import CampaignQRPayment from '../Payment/CampaignQRPayment'; // ✅ New component
+import CampaignPaymentSuccess from '../Payment/CampaignPaymentSuccess'; // ✅ New component
 import './CampaignDetails.css';
 
 function CampaignDetails() {
@@ -13,7 +13,7 @@ function CampaignDetails() {
     const navigate = useNavigate();
     const [campaign, setCampaign] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [showPaymentForm, setShowPaymentForm] = useState(false);
+    const [showQRPayment, setShowQRPayment] = useState(false);
     const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
     const [paymentData, setPaymentData] = useState(null);
     const [error, setError] = useState('');
@@ -50,28 +50,40 @@ function CampaignDetails() {
         }
     }, [campaignId]);
 
+    const handleDonateClick = () => {
+        if (!user) {
+            alert('Please login to donate');
+            return;
+        }
+
+        // Check if campaign has QR codes
+        const validQRCodes = campaign.qrCodes?.filter(qr => qr.imageUrl && qr.bankName) || [];
+        if (validQRCodes.length === 0) {
+            alert('Payment methods are not available for this campaign yet.');
+            return;
+        }
+
+        setShowQRPayment(true);
+    };
+
+    // ✅ Updated success handler for new payment system
     const handlePaymentSuccess = async (paymentInfo) => {
-        // Update local campaign state immediately for better UX
-        setCampaign(prevCampaign => ({
-            ...prevCampaign,
-            currentAmount: prevCampaign.currentAmount + paymentInfo.amount,
-            donationCount: prevCampaign.donationCount + 1
-        }));
+        console.log('🎉 Donation payment success:', paymentInfo);
+
+        // Note: Don't update campaign amounts here since donation is pending verification
+        // The campaign creator will verify and approve the donation
 
         // Store payment data for success modal
         setPaymentData(paymentInfo);
-        setShowPaymentForm(false);
+        setShowQRPayment(false);
         setShowPaymentSuccess(true);
-    };
-
-    const handlePaymentError = (error) => {
-        console.error('Payment error:', error);
-        setError('Payment failed. Please try again.');
     };
 
     const handleClosePaymentSuccess = () => {
         setShowPaymentSuccess(false);
         setPaymentData(null);
+        // Refresh campaign data to get latest donation info
+        window.location.reload();
     };
 
     const formatCurrency = (amount) => {
@@ -125,9 +137,9 @@ function CampaignDetails() {
     }
 
     const progress = getCampaignProgress(campaign);
-    const goalReached = isCampaignGoalReached(campaign);
     const daysRemaining = getDaysRemaining(campaign);
     const isCreator = user && user.uid === campaign.creator.id;
+    const hasValidQRCodes = campaign.qrCodes?.some(qr => qr.imageUrl && qr.bankName);
 
     return (
         <div className="campaign-details-container">
@@ -199,16 +211,55 @@ function CampaignDetails() {
                         <div className="campaign-description">
                             <p>{campaign.description}</p>
                         </div>
+
+                        {/* ✅ Updated donations display - Show verified donations only */}
+                        {campaign.donations && campaign.donations.length > 0 && (
+                            <div className="recent-donations">
+                                <h3>Recent Donations</h3>
+                                <div className="donations-list">
+                                    {campaign.donations
+                                        .filter(donation => donation.status === 'confirmed' || donation.status === 'verified')
+                                        .slice(0, 5)
+                                        .map((donation, index) => (
+                                            <div key={index} className="donation-item">
+                                                <div className="donation-info">
+                                                    <strong>{donation.donorName}</strong>
+                                                    <span className="donation-amount">{formatCurrency(donation.amount)}</span>
+                                                </div>
+                                                {donation.message && (
+                                                    <p className="donation-message">"{donation.message}"</p>
+                                                )}
+                                                <div className="donation-timestamp">
+                                                    {formatDate(donation.timestamp)}
+                                                </div>
+                                            </div>
+                                        ))}
+                                </div>
+
+                                {/* ✅ Show pending donations for campaign creator */}
+                                {isCreator && (
+                                    <div className="pending-donations">
+                                        <h4>⏳ Pending Verification</h4>
+                                        <p>
+                                            {campaign.donations.filter(d => d.status === 'pending_verification').length}
+                                            donation(s) waiting for your verification
+                                        </p>
+                                        <small>Check your messages to verify donations</small>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 <div className="campaign-sidebar">
                     <div className="donation-card">
-                        <div className="amount-raised">
-                            <h2>{formatCurrency(campaign.currentAmount)}</h2>
-                            <p>raised of {formatCurrency(campaign.goalAmount)} goal</p>
+                        <div className="goal-amount">
+                            <h2>Goal: {formatCurrency(campaign.goalAmount)}</h2>
+                            <p>Help us reach our target</p>
                         </div>
 
+                        {/* ✅ Updated progress display */}
                         <div className="progress-section">
                             <div className="progress-bar">
                                 <div
@@ -217,16 +268,20 @@ function CampaignDetails() {
                                 ></div>
                             </div>
                             <div className="progress-stats">
-                                <span>{campaign.donationCount || 0} donors</span>
-                                <span>{progress.toFixed(1)}% funded</span>
+                                <div className="stat">
+                                    <span className="stat-value">{formatCurrency(campaign.currentAmount || 0)}</span>
+                                    <span className="stat-label">raised</span>
+                                </div>
+                                <div className="stat">
+                                    <span className="stat-value">{campaign.donationCount || 0}</span>
+                                    <span className="stat-label">donations</span>
+                                </div>
+                                <div className="stat">
+                                    <span className="stat-value">{progress.toFixed(1)}%</span>
+                                    <span className="stat-label">funded</span>
+                                </div>
                             </div>
                         </div>
-
-                        {goalReached && (
-                            <div className="goal-reached-message">
-                                🎉 Goal Reached! Thank you to all donors!
-                            </div>
-                        )}
 
                         {daysRemaining !== null && (
                             <div className="time-remaining">
@@ -244,23 +299,20 @@ function CampaignDetails() {
                             </div>
                         )}
 
+                        {/* ✅ Updated donation button */}
                         {!isCreator && campaign.status === 'active' && (
                             <div className="donation-actions">
-                                {!showPaymentForm ? (
+                                {hasValidQRCodes ? (
                                     <button
                                         className="donate-btn-large"
-                                        onClick={() => setShowPaymentForm(true)}
+                                        onClick={handleDonateClick}
                                     >
-                                        Donate Now with Stripe
+                                        💝 Donate Now
                                     </button>
                                 ) : (
-                                    <StripePaymentForm
-                                        campaignId={campaign.id}
-                                        campaignTitle={campaign.title}
-                                        onPaymentSuccess={handlePaymentSuccess}
-                                        onPaymentError={handlePaymentError}
-                                        onCancel={() => setShowPaymentForm(false)}
-                                    />
+                                    <div className="no-payment-methods">
+                                        <p>Payment methods not yet available</p>
+                                    </div>
                                 )}
                             </div>
                         )}
@@ -271,15 +323,48 @@ function CampaignDetails() {
                                 <Link to="/my-campaigns" className="manage-link">
                                     Manage Campaigns
                                 </Link>
+                                {!hasValidQRCodes && (
+                                    <div className="payment-setup-warning">
+                                        <p><strong>⚠️ Setup payment methods</strong></p>
+                                        <p>Add QR codes to receive donations</p>
+                                        <Link to={`/edit-campaign/${campaign.id}`} className="setup-payment-btn">
+                                            Add Payment Methods
+                                        </Link>
+                                    </div>
+                                )}
+
+                                {/* ✅ Quick access to messages for pending donations */}
+                                <div className="creator-messages">
+                                    <h4>📧 Donation Messages</h4>
+                                    <p>Check your messages for donation receipts to verify</p>
+                                    <button
+                                        className="open-messages-btn"
+                                        onClick={() => {
+                                            // This will be handled by the chat system
+                                            console.log('Opening messages for donation verification');
+                                        }}
+                                    >
+                                        💬 Open Messages
+                                    </button>
+                                </div>
                             </div>
                         )}
                     </div>
                 </div>
             </div>
 
-            {/* Payment Success Modal */}
+            {/* ✅ Updated QR Payment Modal */}
+            {showQRPayment && (
+                <CampaignQRPayment
+                    campaign={campaign}
+                    onClose={() => setShowQRPayment(false)}
+                    onPaymentSuccess={handlePaymentSuccess}
+                />
+            )}
+
+            {/* ✅ Updated Payment Success Modal */}
             {showPaymentSuccess && paymentData && (
-                <PaymentSuccess
+                <CampaignPaymentSuccess
                     paymentData={paymentData}
                     campaignTitle={campaign.title}
                     campaignId={campaign.id}

@@ -1,258 +1,359 @@
-// src/components/Pages/Fundraising.js
+// src/components/Pages/EditListing.js
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth } from '../../firebase';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { useCampaign } from '../../context/CampaignContext';
-import './Fundraising.css';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import '../Pages/EditListings.css';
 
-function Fundraising() {
-    const [campaigns, setCampaigns] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [filter, setFilter] = useState('all');
-    const [searchTerm, setSearchTerm] = useState('');
+// Cloudinary configuration
+const CLOUD_NAME = "dh4zcjn4r";  // Replace with your actual cloud name
+const UPLOAD_PRESET = "happ2zxv";  // Replace with your actual upload preset
+
+const EditListing = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
     const user = auth.currentUser;
-    const { getCampaignProgress, isCampaignGoalReached, getDaysRemaining } = useCampaign();
 
-    const fetchCampaigns = async () => {
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [price, setPrice] = useState('');
+    const [category, setCategory] = useState('');
+    const [status, setStatus] = useState('');
+    const [currentImages, setCurrentImages] = useState([]);
+    const [newImages, setNewImages] = useState([]);
+    const [previewUrls, setPreviewUrls] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [updating, setUpdating] = useState(false);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        if (!user) {
+            setError('You must be logged in to edit listings');
+            setLoading(false);
+            return;
+        }
+
+        const fetchListing = async () => {
+            try {
+                const docRef = doc(db, "products", id);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+
+                    // Check if the current user is the owner of this listing
+                    if (data.seller.id !== user.uid) {
+                        setError("You don't have permission to edit this listing");
+                        setLoading(false);
+                        return;
+                    }
+
+                    setName(data.name || '');
+                    setDescription(data.description || '');
+                    setPrice(data.price?.toString() || '');
+                    setCategory(data.category || '');
+                    setStatus(data.status || 'active');
+                    setCurrentImages(data.images || []);
+                    setLoading(false);
+                } else {
+                    setError("Listing not found");
+                    setLoading(false);
+                }
+            } catch (err) {
+                console.error("Error fetching listing:", err);
+                setError("Failed to load listing. Please try again.");
+                setLoading(false);
+            }
+        };
+
+        fetchListing();
+    }, [id, user]);
+
+    const handleImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        setNewImages(files);
+
+        // Create preview URLs for new images
+        const newPreviewUrls = files.map((file) => URL.createObjectURL(file));
+        setPreviewUrls(newPreviewUrls);
+    };
+
+    const uploadToCloudinary = async (file) => {
         try {
-            setLoading(true);
-            console.log('Fetching campaigns...');
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', UPLOAD_PRESET);
 
-            // Simple query without orderBy to avoid index issues
-            const q = query(
-                collection(db, "campaigns"),
-                where("status", "==", "active")
-            );
-            const querySnapshot = await getDocs(q);
+            console.log(`Uploading to Cloudinary: ${CLOUD_NAME} with preset: ${UPLOAD_PRESET}`);
 
-            const campaignList = [];
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                console.log('Fetched campaign:', { id: doc.id, ...data });
-                campaignList.push({
-                    id: doc.id,
-                    ...data
-                });
+            const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, {
+                method: 'POST',
+                body: formData,
             });
 
-            console.log('Total campaigns fetched:', campaignList.length);
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Cloudinary error:', errorData);
+                throw new Error(`Upload failed: ${errorData.error?.message || 'Unknown error'}`);
+            }
 
-            // Sort by createdAt manually
-            campaignList.sort((a, b) => {
-                const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
-                const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt);
-                return dateB - dateA;
-            });
-
-            setCampaigns(campaignList);
-            setLoading(false);
+            const data = await response.json();
+            console.log('Upload successful:', data.secure_url);
+            return data.secure_url;
         } catch (error) {
-            console.error("Error fetching campaigns: ", error);
-            setLoading(false);
+            console.error('Error uploading to Cloudinary:', error);
+            throw error;
         }
     };
 
-    useEffect(() => {
-        console.log('Fundraising component mounted');
-        fetchCampaigns();
-    }, []);
-
-    const handleRefresh = async () => {
-        console.log('Manual refresh triggered');
-        await fetchCampaigns();
+    const handleRemoveCurrentImage = (index) => {
+        setCurrentImages(currentImages.filter((_, i) => i !== index));
     };
 
-    const filteredCampaigns = campaigns.filter(campaign => {
-        // Filter by category if not 'all'
-        const categoryMatch = filter === 'all' || campaign.category === filter;
+    const handleRemoveNewImage = (index) => {
+        const updatedNewImages = [...newImages];
+        updatedNewImages.splice(index, 1);
+        setNewImages(updatedNewImages);
 
-        // Search term filter
-        const searchMatch = campaign.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (campaign.description && campaign.description.toLowerCase().includes(searchTerm.toLowerCase()));
-
-        return categoryMatch && searchMatch;
-    });
-
-    // Get unique categories for filter dropdown
-    const categories = ['all', ...new Set(campaigns.map(campaign => campaign.category).filter(Boolean))];
-
-    const formatCurrency = (amount) => {
-        return `RM ${amount.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        const updatedPreviewUrls = [...previewUrls];
+        URL.revokeObjectURL(updatedPreviewUrls[index]);
+        updatedPreviewUrls.splice(index, 1);
+        setPreviewUrls(updatedPreviewUrls);
     };
 
-    const formatDate = (date) => {
-        if (!date) return null;
-        const d = date.toDate ? date.toDate() : new Date(date);
-        return d.toLocaleDateString();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!user) {
+            setError('You must be logged in to update a listing');
+            return;
+        }
+
+        if (!name || !price) {
+            setError('Please fill in all required fields');
+            return;
+        }
+
+        // Validate price is a valid number
+        const numPrice = parseFloat(price);
+        if (isNaN(numPrice) || numPrice <= 0) {
+            setError('Please enter a valid price');
+            return;
+        }
+
+        try {
+            setUpdating(true);
+            setError('');
+
+            // Upload any new images to Cloudinary
+            const newImageUrls = [];
+            if (newImages.length > 0) {
+                for (const img of newImages) {
+                    try {
+                        const url = await uploadToCloudinary(img);
+                        if (url) {
+                            newImageUrls.push(url);
+                        }
+                    } catch (err) {
+                        console.error('Error with image upload:', err);
+                    }
+                }
+            }
+
+            // Combine current and new images
+            const allImages = [...currentImages, ...newImageUrls];
+
+            if (allImages.length === 0) {
+                setError('At least one image is required');
+                setUpdating(false);
+                return;
+            }
+
+            // Update listing in Firestore
+            const listingRef = doc(db, "products", id);
+            await updateDoc(listingRef, {
+                name,
+                description,
+                price: numPrice,
+                category: category || 'other',
+                status,
+                images: allImages,
+                updatedAt: new Date()
+            });
+
+            // Clean up preview URLs
+            previewUrls.forEach(URL.revokeObjectURL);
+
+            alert('Listing updated successfully!');
+
+            // Redirect to my listings
+            navigate('/my-listings');
+        } catch (error) {
+            console.error('Error updating listing:', error);
+            setError(`Failed to update listing: ${error.message}`);
+            setUpdating(false);
+        }
     };
+
+    if (loading) {
+        return <div className="loading-container">Loading listing details...</div>;
+    }
+
+    if (error) {
+        return (
+            <div className="error-container">
+                <p>{error}</p>
+                <button onClick={() => navigate('/my-listings')} className="back-button">
+                    Back to My Listings
+                </button>
+            </div>
+        );
+    }
 
     return (
-        <div className="fundraising-container">
-            <div className="fundraising-header">
-                <h1>Fundraising Campaigns</h1>
-                <p>Support meaningful causes and help make a difference in our community</p>
-            </div>
+        <div className="edit-listing-container">
+            <h1>Edit Listing</h1>
 
-            <div className="fundraising-actions">
-                <div className="search-filter-container">
+            <form onSubmit={handleSubmit} className="edit-listing-form">
+                <div className="form-group">
+                    <label htmlFor="name">Product Name *</label>
                     <input
                         type="text"
-                        placeholder="Search campaigns..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="search-input"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Enter product name"
+                        required
                     />
+                </div>
 
+                <div className="form-group">
+                    <label htmlFor="description">Description</label>
+                    <textarea
+                        id="description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Describe your product"
+                        rows="4"
+                    />
+                </div>
+
+                <div className="form-row">
+                    <div className="form-group">
+                        <label htmlFor="price">Price (RM) *</label>
+                        <input
+                            type="number"
+                            id="price"
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
+                            min="0.01"
+                            step="0.01"
+                            placeholder="0.00"
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="category">Category</label>
+                        <select
+                            id="category"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                        >
+                            <option value="">Select a category</option>
+                            <option value="books">Books</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="furniture">Furniture</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="status">Status</label>
                     <select
-                        value={filter}
-                        onChange={(e) => setFilter(e.target.value)}
-                        className="filter-select"
+                        id="status"
+                        value={status}
+                        onChange={(e) => setStatus(e.target.value)}
                     >
-                        {categories.map(category => (
-                            <option key={category} value={category}>
-                                {category === 'all' ? 'All Categories' :
-                                    category.charAt(0).toUpperCase() + category.slice(1)}
-                            </option>
-                        ))}
+                        <option value="active">Active</option>
+                        <option value="sold">Sold</option>
+                        <option value="pending">Pending</option>
+                        <option value="inactive">Inactive</option>
                     </select>
                 </div>
 
-                {user && (
-                    <div style={{ display: 'flex', gap: '1rem' }}>
-                        <button
-                            onClick={handleRefresh}
-                            style={{
-                                background: '#95a5a6',
-                                color: 'white',
-                                padding: '0.75rem 1rem',
-                                border: 'none',
-                                borderRadius: '8px',
-                                cursor: 'pointer',
-                                fontWeight: '600'
-                            }}
-                        >
-                            Refresh
-                        </button>
-                        <Link to="/create-campaign" className="create-campaign-btn">
-                            Start a Campaign
-                        </Link>
-                    </div>
-                )}
-            </div>
-
-            {loading ? (
-                <div className="loading">Loading campaigns...</div>
-            ) : (
-                <>
-                    {filteredCampaigns.length > 0 ? (
-                        <div className="campaigns-grid">
-                            {filteredCampaigns.map(campaign => {
-                                const progress = getCampaignProgress(campaign);
-                                const goalReached = isCampaignGoalReached(campaign);
-                                const daysRemaining = getDaysRemaining(campaign);
-
-                                return (
-                                    <div key={campaign.id} className="campaign-card">
-                                        <div className="campaign-image">
-                                            {campaign.images && campaign.images.length > 0 ? (
-                                                <img src={campaign.images[0]} alt={campaign.title} />
-                                            ) : (
-                                                <div className="no-image">No Image</div>
-                                            )}
-                                            {goalReached && (
-                                                <div className="goal-reached-badge">
-                                                    Goal Reached!
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div className="campaign-info">
-                                            <div className="campaign-category">
-                                                {campaign.category && (
-                                                    <span className="category-tag">
-                                                        {campaign.category.charAt(0).toUpperCase() + campaign.category.slice(1)}
-                                                    </span>
-                                                )}
-                                            </div>
-
-                                            <h3>{campaign.title}</h3>
-                                            <p className="campaign-description">
-                                                {campaign.description.length > 120
-                                                    ? campaign.description.substring(0, 120) + '...'
-                                                    : campaign.description}
-                                            </p>
-
-                                            <div className="progress-section">
-                                                <div className="progress-bar">
-                                                    <div
-                                                        className="progress-fill"
-                                                        style={{ width: `${progress}%` }}
-                                                    ></div>
-                                                </div>
-                                                <div className="progress-text">
-                                                    <span className="current-amount">
-                                                        {formatCurrency(campaign.currentAmount || 0)}
-                                                    </span>
-                                                    <span className="goal-amount">
-                                                        of {formatCurrency(campaign.goalAmount)}
-                                                    </span>
-                                                </div>
-                                                <div className="campaign-stats">
-                                                    <span>{campaign.donationCount || 0} donors</span>
-                                                    <span>{progress.toFixed(1)}% funded</span>
-                                                    {daysRemaining !== null && (
-                                                        <span>
-                                                            {daysRemaining > 0
-                                                                ? `${daysRemaining} days left`
-                                                                : 'Ended'
-                                                            }
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            </div>
-
-                                            <div className="campaign-creator">
-                                                <span>by {campaign.creator?.name || campaign.creator?.email || 'Anonymous'}</span>
-                                            </div>
-
-                                            <div className="campaign-actions">
-                                                <Link
-                                                    to={`/campaign/${campaign.id}`}
-                                                    className="donate-btn"
-                                                >
-                                                    View & Donate
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                <div className="form-group">
+                    <label>Current Images</label>
+                    {currentImages.length > 0 ? (
+                        <div className="image-previews">
+                            {currentImages.map((url, index) => (
+                                <div key={index} className="image-preview">
+                                    <img src={url} alt={`Current ${index}`} />
+                                    <button
+                                        type="button"
+                                        className="remove-image"
+                                        onClick={() => handleRemoveCurrentImage(index)}
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
+                            ))}
                         </div>
                     ) : (
-                        <div className="no-campaigns">
-                            <div className="no-campaigns-content">
-                                <h3>No campaigns found</h3>
-                                <p>
-                                    {searchTerm
-                                        ? `No campaigns match "${searchTerm}"`
-                                        : filter === 'all'
-                                            ? "No active campaigns at the moment."
-                                            : `No campaigns found in the ${filter} category.`
-                                    }
-                                </p>
-                                {user && (
-                                    <Link to="/create-campaign" className="create-first-campaign">
-                                        Start the First Campaign
-                                    </Link>
-                                )}
-                            </div>
+                        <p className="no-images">No current images</p>
+                    )}
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="newImages">Add New Images</label>
+                    <input
+                        type="file"
+                        id="newImages"
+                        onChange={handleImageChange}
+                        accept="image/*"
+                        multiple
+                    />
+                    <p className="help-text">You can upload multiple images</p>
+
+                    {previewUrls.length > 0 && (
+                        <div className="image-previews">
+                            {previewUrls.map((url, index) => (
+                                <div key={index} className="image-preview">
+                                    <img src={url} alt={`New ${index}`} />
+                                    <button
+                                        type="button"
+                                        className="remove-image"
+                                        onClick={() => handleRemoveNewImage(index)}
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
+                            ))}
                         </div>
                     )}
-                </>
-            )}
+                </div>
+
+                <div className="form-actions">
+                    <button
+                        type="button"
+                        onClick={() => navigate('/my-listings')}
+                        className="cancel-button"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="submit"
+                        className="submit-button"
+                        disabled={updating}
+                    >
+                        {updating ? 'Updating...' : 'Update Listing'}
+                    </button>
+                </div>
+            </form>
         </div>
     );
-}
+};
 
-export default Fundraising;
+export default EditListing;

@@ -158,3 +158,284 @@
     text-align: center;
   }
 }
+/* Additional CSS for Cart.css - Add these styles to your existing Cart.css */
+
+/* Accepted Offers Section */
+.accepted-offers-section {
+  margin-bottom: 30px;
+  background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+  border: 2px solid #28a745;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.accepted-offers-section h3 {
+  color: #28a745;
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.offers-notice {
+  background-color: rgba(40, 167, 69, 0.1);
+  border: 1px solid #28a745;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+  color: #155724;
+  font-size: 14px;
+}
+
+.cart-item.offer-item {
+  background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+  border: 2px solid #ffd700;
+  border-radius: 10px;
+  position: relative;
+}
+
+.cart-item.offer-item::before {
+  content: "💰 ACCEPTED OFFER";
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  background: #28a745;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 0 8px 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.offer-pricing {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.offer-pricing .original-price {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+}
+
+.offer-pricing .crossed-out {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.offer-pricing .offer-price {
+  color: #28a745;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.offer-pricing .savings {
+  color: #dc3545;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.offer-status {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.item-quantity.offer-quantity {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.fixed-quantity {
+  font-weight: 700;
+  color: #333;
+  font-size: 16px;
+}
+
+.item-total.offer-total .final-price {
+  color: #28a745;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.remove-btn.offer-remove {
+  background-color: #dc3545;
+  border: 2px solid #dc3545;
+}
+
+.remove-btn.offer-remove:hover {
+  background-color: #c82333;
+  border-color: #c82333;
+}
+
+/* Regular Cart Section */
+.regular-cart-section {
+  margin-bottom: 20px;
+}
+
+.regular-cart-section h3 {
+  color: #333;
+  margin: 0 0 15px 0;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Cart Summary Updates */
+.cart-breakdown {
+  margin-bottom: 15px;
+}
+
+.breakdown-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.breakdown-row.offer-row {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.breakdown-divider {
+  border: none;
+  border-top: 2px solid #e9ecef;
+  margin: 10px 0;
+}
+
+.offers-notice-checkout {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin: 15px 0;
+  color: #856404;
+  font-size: 13px;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #666;
+}
+
+.loading-state h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+/* Offers Notice in Header */
+.offers-notice {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-top: 10px;
+  color: #155724;
+}
+
+.offers-notice p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Seller Breakdown */
+.seller-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.seller-breakdown .seller-amount {
+  color: #333;
+  font-size: 16px;
+  margin: 0;
+}
+
+.seller-breakdown .item-breakdown,
+.seller-breakdown .offer-breakdown {
+  color: #666;
+  font-size: 13px;
+  margin: 0;
+  padding-left: 10px;
+}
+
+.seller-breakdown .offer-breakdown {
+  color: #28a745;
+  font-weight: 600;
+}
+
+/* Payment Summary Updates */
+.summary-breakdown {
+  margin-bottom: 15px;
+}
+
+.summary-row.offer-summary {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.summary-row.total-row {
+  border-top: 2px solid #e9ecef;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+.summary-divider {
+  border: none;
+  border-top: 1px solid #e9ecef;
+  margin: 8px 0;
+}
+
+/* Payment Instructions for Offers */
+.payment-instructions .offer-instruction {
+  background-color: #fff3cd;
+  border-left: 4px solid #ffd700;
+  padding: 8px 12px;
+  margin: 5px 0;
+  border-radius: 0 4px 4px 0;
+  color: #856404;
+}
+
+/* Order Summary in Receipt Step */
+.order-summary .summary-row.offer-summary {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.order-summary .summary-row.total-row {
+  border-top: 2px solid #e9ecef;
+  padding-top: 10px;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cart-item.offer-item::before {
+      font-size: 10px;
+      padding: 3px 8px;
+  }
+  
+  .offer-pricing {
+      font-size: 13px;
+  }
+  
+  .seller-breakdown {
+      font-size: 12px;
+  }
+}

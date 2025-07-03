@@ -527,3 +527,451 @@
         font-size: 1.2rem;
     }
 }
+/* Add these styles to your existing CampaignDetails.css */
+
+/* QR Payment Button */
+.donate-btn-large {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.donate-btn-large:hover {
+    background: linear-gradient(135deg, #229954, #1e8449);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+/* No Payment Methods */
+.no-payment-methods {
+    padding: 1rem;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.no-payment-methods p {
+    margin: 0;
+    color: #856404;
+    font-size: 0.9rem;
+}
+
+/* Payment Setup Warning for Creators */
+.payment-setup-warning {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    border-left: 4px solid #f39c12;
+}
+
+.payment-setup-warning p {
+    margin: 0.5rem 0;
+    color: #856404;
+    font-size: 0.9rem;
+}
+
+.payment-setup-warning strong {
+    color: #f39c12;
+}
+
+.setup-payment-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #f39c12;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.setup-payment-btn:hover {
+    background: #e67e22;
+    color: white;
+}
+
+/* Recent Donations Section */
+.recent-donations {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e1e8ed;
+}
+
+.recent-donations h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.donations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.donation-item {
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+}
+
+.donation-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.donation-info strong {
+    color: #2c3e50;
+    font-size: 0.95rem;
+}
+
+.donation-amount {
+    color: #27ae60;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.donation-message {
+    color: #7f8c8d;
+    font-style: italic;
+    font-size: 0.9rem;
+    margin: 0.5rem 0 0 0;
+    line-height: 1.4;
+}
+
+/* Goal Reached Message Update */
+.goal-reached-message {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    margin: 1rem 0;
+}
+
+/* Creator Info Updates */
+.creator-info {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #e8f4fd;
+    border: 1px solid #b3d7ff;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.creator-info p {
+    margin: 0.5rem 0;
+    color: #2c3e50;
+    font-size: 0.9rem;
+}
+
+.manage-link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.manage-link:hover {
+    background: #2980b9;
+    color: white;
+}
+
+/* Responsive Updates */
+@media (max-width: 768px) {
+    .donate-btn-large {
+        font-size: 1rem;
+        padding: 0.875rem 1.5rem;
+    }
+    
+    .donation-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    
+    .payment-setup-warning {
+        padding: 0.75rem;
+    }
+    
+    .setup-payment-btn,
+    .manage-link {
+        display: block;
+        text-align: center;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .recent-donations {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+    }
+    
+    .donation-item {
+        padding: 0.75rem;
+    }
+    
+    .donation-message {
+        font-size: 0.85rem;
+    }
+}
+/* Goal Amount Section (replaces amount-raised) */
+.goal-amount {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border-radius: 12px;
+    color: white;
+}
+
+.goal-amount h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.goal-amount p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 1rem;
+}
+
+/* QR Payment Button */
+.donate-btn-large {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.donate-btn-large:hover {
+    background: linear-gradient(135deg, #229954, #1e8449);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+}
+
+/* No Payment Methods */
+.no-payment-methods {
+    padding: 1rem;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.no-payment-methods p {
+    margin: 0;
+    color: #856404;
+    font-size: 0.9rem;
+}
+
+/* Payment Setup Warning for Creators */
+.payment-setup-warning {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    border-left: 4px solid #f39c12;
+}
+
+.payment-setup-warning p {
+    margin: 0.5rem 0;
+    color: #856404;
+    font-size: 0.9rem;
+}
+
+.payment-setup-warning strong {
+    color: #f39c12;
+}
+
+.setup-payment-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #f39c12;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.setup-payment-btn:hover {
+    background: #e67e22;
+    color: white;
+}
+
+/* Recent Donations Section */
+.recent-donations {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e1e8ed;
+}
+
+.recent-donations h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.donations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.donation-item {
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+}
+
+.donation-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.donation-info strong {
+    color: #2c3e50;
+    font-size: 0.95rem;
+}
+
+.donation-amount {
+    color: #27ae60;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.donation-message {
+    color: #7f8c8d;
+    font-style: italic;
+    font-size: 0.9rem;
+    margin: 0.5rem 0 0 0;
+    line-height: 1.4;
+}
+
+/* Goal Reached Message Update */
+.goal-reached-message {
+    background: linear-gradient(135deg, #27ae60, #229954);
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 600;
+    margin: 1rem 0;
+}
+
+/* Creator Info Updates */
+.creator-info {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #e8f4fd;
+    border: 1px solid #b3d7ff;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.creator-info p {
+    margin: 0.5rem 0;
+    color: #2c3e50;
+    font-size: 0.9rem;
+}
+
+.manage-link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.manage-link:hover {
+    background: #2980b9;
+    color: white;
+}
+
+/* Responsive Updates */
+@media (max-width: 768px) {
+    .donate-btn-large {
+        font-size: 1rem;
+        padding: 0.875rem 1.5rem;
+    }
+    
+    .donation-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    
+    .payment-setup-warning {
+        padding: 0.75rem;
+    }
+    
+    .setup-payment-btn,
+    .manage-link {
+        display: block;
+        text-align: center;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .recent-donations {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+    }
+    
+    .donation-item {
+        padding: 0.75rem;
+    }
+    
+    .donation-message {
+        font-size: 0.85rem;
+    }
+}

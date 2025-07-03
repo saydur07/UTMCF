@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db, auth } from '../../../firebase';
 import { collection, addDoc } from 'firebase/firestore';
+import QRUpload from '../../payment/QRUpload';
 import './AddProduct.css';
 
 // Cloudinary configuration
@@ -15,6 +16,8 @@ function AddProduct() {
     const [category, setCategory] = useState('');
     const [images, setImages] = useState([]);
     const [previewUrls, setPreviewUrls] = useState([]);
+    const [qrCodes, setQrCodes] = useState([]);
+    const [meetupPreference, setMeetupPreference] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -28,6 +31,10 @@ function AddProduct() {
         // Create preview URLs
         const previewUrlsArray = files.map((file) => URL.createObjectURL(file));
         setPreviewUrls(previewUrlsArray);
+    };
+
+    const handleQRCodesChange = (updatedQRCodes) => {
+        setQrCodes(updatedQRCodes);
     };
 
     const uploadToCloudinary = async (file) => {
@@ -66,6 +73,23 @@ function AddProduct() {
             return;
         }
 
+        // Validate price is a valid number
+        const numPrice = parseFloat(price);
+        if (isNaN(numPrice) || numPrice <= 0) {
+            setError('Please enter a valid price');
+            return;
+        }
+
+        // Validate QR codes if user wants to accept QR payments
+        const validQRCodes = qrCodes.filter(qr =>
+            qr.imageUrl && qr.bankName && qr.accountHolder
+        );
+
+        if (validQRCodes.length === 0 && !meetupPreference) {
+            setError('Please add at least one payment method or enable meetup option');
+            return;
+        }
+
         try {
             setLoading(true);
             setError('');
@@ -81,13 +105,15 @@ function AddProduct() {
                 throw new Error('Failed to upload images');
             }
 
-            // Add product to Firestore
+            // Add product to Firestore with QR codes
             await addDoc(collection(db, 'products'), {
                 name,
                 description,
-                price: parseFloat(price),
-                category,
+                price: numPrice,
+                category: category || 'other',
                 images: imageUrls,
+                qrCodes: validQRCodes, // ✅ Add QR codes array
+                meetupPreference: meetupPreference, // ✅ Add meetup preference
                 seller: {
                     id: user.uid,
                     email: user.email,
@@ -99,6 +125,8 @@ function AddProduct() {
 
             // Clean up preview URLs
             previewUrls.forEach(URL.revokeObjectURL);
+
+            alert('Product listed successfully!');
 
             // Redirect to marketplace
             navigate('/marketplace');
@@ -112,6 +140,7 @@ function AddProduct() {
     return (
         <div className="add-product-container">
             <h1>List Item for Sale</h1>
+            <p className="subtitle">Add your product with payment options for buyers</p>
 
             {error && <div className="error-message">{error}</div>}
 
@@ -192,6 +221,43 @@ function AddProduct() {
                             ))}
                         </div>
                     )}
+                </div>
+
+                {/* Payment Options Section */}
+                <div className="payment-options-section">
+                    <h3>Payment Options for Buyers</h3>
+                    <p className="section-description">
+                        Choose how buyers can pay for your products. You can enable both options.
+                    </p>
+
+                    <div className="payment-preferences">
+                        <div className="preference-option">
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={meetupPreference}
+                                    onChange={(e) => setMeetupPreference(e.target.checked)}
+                                />
+                                <span className="checkmark"></span>
+                                <div className="option-info">
+                                    <strong>Accept Meetup Payments</strong>
+                                    <p>Buyers can arrange to meet you in person and pay with cash</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div className="qr-payment-section">
+                            <div className="qr-header">
+                                <h4>QR Payment Methods</h4>
+                                <p>Allow buyers to pay instantly via QR code scan</p>
+                            </div>
+
+                            <QRUpload
+                                onQRCodesChange={handleQRCodesChange}
+                                existingQRCodes={qrCodes}
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 <div className="form-actions">

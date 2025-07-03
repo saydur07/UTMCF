@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db, auth } from '../../firebase';
 import { collection, addDoc } from 'firebase/firestore';
+import QRUpload from '../Payment/QRUpload';
 import './CreateCampaign.css';
 
 // Cloudinary configuration - same as AddItem
@@ -17,6 +18,7 @@ function CreateCampaign() {
     const [endDate, setEndDate] = useState('');
     const [images, setImages] = useState([]);
     const [previewUrls, setPreviewUrls] = useState([]);
+    const [qrCodes, setQrCodes] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -30,6 +32,10 @@ function CreateCampaign() {
         // Create preview URLs
         const previewUrlsArray = files.map((file) => URL.createObjectURL(file));
         setPreviewUrls(previewUrlsArray);
+    };
+
+    const handleQRCodesChange = (updatedQRCodes) => {
+        setQrCodes(updatedQRCodes);
     };
 
     const uploadToCloudinary = async (file) => {
@@ -101,6 +107,16 @@ function CreateCampaign() {
             }
         }
 
+        // Validate QR codes - at least one complete QR code is required
+        const validQRCodes = qrCodes.filter(qr =>
+            qr.imageUrl && qr.bankName && qr.accountHolder
+        );
+
+        if (validQRCodes.length === 0) {
+            setError('At least one complete payment method is required (QR code with bank details)');
+            return;
+        }
+
         try {
             setLoading(true);
             setError('');
@@ -140,6 +156,8 @@ function CreateCampaign() {
                 category: category || 'other',
                 endDate: endDate ? new Date(endDate) : null,
                 images: imageUrls,
+                qrCodes: validQRCodes, // Add QR codes to campaign
+                donations: [], // Initialize donations array
                 creator: {
                     id: user.uid,
                     email: user.email,
@@ -278,6 +296,12 @@ function CreateCampaign() {
                         </div>
                     )}
                 </div>
+
+                {/* QR Code Upload Section */}
+                <QRUpload
+                    onQRCodesChange={handleQRCodesChange}
+                    existingQRCodes={qrCodes}
+                />
 
                 <div className="form-actions">
                     <button

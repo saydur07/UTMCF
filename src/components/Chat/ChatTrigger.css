@@ -1,0 +1,49 @@
+/* Alternative: High-contrast solid chat button */
+.chat-trigger-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: #1f2937; /* Dark gray */
+    border: 4px solid #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+}
+
+.chat-trigger-btn:hover {
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+    background: #0f172a; /* Even darker */
+    border-color: #fbbf24; /* Yellow border on hover */
+}
+
+.chat-trigger-btn:active {
+    transform: translateY(-1px) scale(1.05);
+}
+
+.chat-icon {
+    font-size: 28px;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.1));
+    font-weight: 900; /* Extra bold */
+}
+
+/* Alternative with background color behind emoji */
+.chat-trigger-btn .chat-icon::before {
+    content: '';
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    z-index: -1;
+}

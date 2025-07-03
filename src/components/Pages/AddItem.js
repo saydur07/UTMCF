@@ -1,12 +1,14 @@
+// src/components/Pages/AddItem.js (Modified with QR)
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db, auth } from '../../firebase';
 import { collection, addDoc } from 'firebase/firestore';
+import QRUpload from '../Payment/QRUpload';
 import './Additem.css';
 
-// Cloudinary configuration - REPLACE THESE WITH YOUR ACTUAL VALUES
-const CLOUD_NAME = "dh4zcjn4r";  // The cloud name from the AddRestaurantPage.js example
-const UPLOAD_PRESET = "happ2zxv";  // The upload preset from the AddRestaurantPage.js example
+// Cloudinary configuration
+const CLOUD_NAME = "dh4zcjn4r";
+const UPLOAD_PRESET = "happ2zxv";
 
 function AddItem() {
     const [name, setName] = useState('');
@@ -15,6 +17,8 @@ function AddItem() {
     const [category, setCategory] = useState('');
     const [images, setImages] = useState([]);
     const [previewUrls, setPreviewUrls] = useState([]);
+    const [qrCodes, setQrCodes] = useState([]);
+    const [meetupPreference, setMeetupPreference] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -28,6 +32,10 @@ function AddItem() {
         // Create preview URLs
         const previewUrlsArray = files.map((file) => URL.createObjectURL(file));
         setPreviewUrls(previewUrlsArray);
+    };
+
+    const handleQRCodesChange = (updatedQRCodes) => {
+        setQrCodes(updatedQRCodes);
     };
 
     const uploadToCloudinary = async (file) => {
@@ -78,6 +86,16 @@ function AddItem() {
             return;
         }
 
+        // Validate QR codes if user wants to accept QR payments
+        const validQRCodes = qrCodes.filter(qr =>
+            qr.imageUrl && qr.bankName && qr.accountHolder
+        );
+
+        if (validQRCodes.length === 0 && !meetupPreference) {
+            setError('Please add at least one payment method or enable meetup option');
+            return;
+        }
+
         try {
             setLoading(true);
             setError('');
@@ -112,8 +130,11 @@ function AddItem() {
                 name,
                 description,
                 price: numPrice,
-                category: category || 'other', // Default to 'other' if no category selected
+                category: category || 'other',
                 images: imageUrls,
+                qrCodes: validQRCodes, // Payment QR codes
+                meetupPreference: meetupPreference, // Whether seller accepts meetups
+                orders: [], // Track orders/sales
                 seller: {
                     id: user.uid,
                     email: user.email,
@@ -131,7 +152,7 @@ function AddItem() {
             // Clean up preview URLs
             previewUrls.forEach(URL.revokeObjectURL);
 
-            alert('Product added successfully!');
+            alert('Product listed successfully!');
 
             // Redirect to marketplace
             navigate('/marketplace');
@@ -145,6 +166,7 @@ function AddItem() {
     return (
         <div className="add-item-container">
             <h1>List Item for Sale</h1>
+            <p className="subtitle">Add your product with payment options for buyers</p>
 
             {error && <div className="error-message">{error}</div>}
 
@@ -225,6 +247,43 @@ function AddItem() {
                             ))}
                         </div>
                     )}
+                </div>
+
+                {/* Payment Options Section */}
+                <div className="payment-options-section">
+                    <h3>Payment Options for Buyers</h3>
+                    <p className="section-description">
+                        Choose how buyers can pay for your products. You can enable both options.
+                    </p>
+
+                    <div className="payment-preferences">
+                        <div className="preference-option">
+                            <label className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={meetupPreference}
+                                    onChange={(e) => setMeetupPreference(e.target.checked)}
+                                />
+                                <span className="checkmark"></span>
+                                <div className="option-info">
+                                    <strong>Accept Meetup Payments</strong>
+                                    <p>Buyers can arrange to meet you in person and pay with cash</p>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div className="qr-payment-section">
+                            <div className="qr-header">
+                                <h4>QR Payment Methods</h4>
+                                <p>Allow buyers to pay instantly via QR code scan</p>
+                            </div>
+
+                            <QRUpload
+                                onQRCodesChange={handleQRCodesChange}
+                                existingQRCodes={qrCodes}
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 <div className="form-actions">

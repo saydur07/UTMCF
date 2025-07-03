@@ -1,5 +1,5 @@
 /* src/components/Payment/StripePaymentForm.css */
-.stripe-payment-form {
+/* .stripe-payment-form {
   background: white;
   border-radius: 12px;
   padding: 2rem;
@@ -7,7 +7,7 @@
   border: 1px solid #e1e8ed;
   max-width: 500px;
   margin: 0 auto;
-}
+} */
 
 .payment-header {
   text-align: center;

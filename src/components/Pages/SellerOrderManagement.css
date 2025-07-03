@@ -1,0 +1,540 @@
+/* src/components/Pages/SellerOrderManagement.css */
+.seller-orders-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.seller-orders-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.seller-orders-header h1 {
+  color: #2c3e50;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.seller-orders-header p {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+}
+
+/* Sales Summary */
+.sales-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.summary-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.summary-value {
+  color: #2c3e50;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.summary-card:nth-child(1) .summary-value {
+  color: #27ae60;
+}
+
+.summary-card:nth-child(2) .summary-value {
+  color: #f39c12;
+}
+
+.summary-card:nth-child(3) .summary-value {
+  color: #3498db;
+}
+
+.summary-label {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Orders Controls */
+.orders-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+}
+
+.orders-filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.filter-select {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.refresh-button {
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.refresh-button:hover {
+  background: linear-gradient(135deg, #2980b9, #1f5f99);
+  transform: translateY(-1px);
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: #7f8c8d;
+  font-size: 1.1rem;
+}
+
+.no-orders {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+}
+
+.no-orders h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.no-orders p {
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.browse-products-btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.browse-products-btn:hover {
+  background: linear-gradient(135deg, #2980b9, #1f5f99);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+  color: white;
+}
+
+/* Seller Orders List */
+.seller-orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.seller-order-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.seller-order-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.seller-order-card.priority-high {
+  border-left: 4px solid #e74c3c;
+}
+
+.seller-order-card.priority-medium {
+  border-left: 4px solid #f39c12;
+}
+
+.seller-order-card.priority-low {
+  border-left: 4px solid #27ae60;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.order-info h3 {
+  color: #2c3e50;
+  margin: 0 0 0.25rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.order-date {
+  color: #7f8c8d;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.order-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.status-badge {
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.priority-indicator {
+  background: #e74c3c;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
+
+.buyer-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.buyer-details {
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.buyer-details strong {
+  color: #3498db;
+}
+
+.buyer-contact {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
+.order-total {
+  color: #27ae60;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.order-items {
+  padding: 1.5rem;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.item-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #f8f9fa;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-details h4 {
+  color: #2c3e50;
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.item-details p {
+  color: #7f8c8d;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.item-total {
+  color: #27ae60;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  border-top: 1px solid #e1e8ed;
+}
+
+.payment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.payment-method {
+  color: #2c3e50;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.reference-number {
+  color: #7f8c8d;
+  font-size: 0.8rem;
+}
+
+.order-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.chat-button {
+  padding: 0.75rem 1.25rem;
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.chat-button:hover {
+  background: linear-gradient(135deg, #2980b9, #1f5f99);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+/* Meetup Summary */
+.meetup-summary {
+  padding: 1.5rem;
+  background: #e8f4fd;
+  border-top: 1px solid #b3d7ff;
+}
+
+.meetup-summary h4 {
+  color: #2980b9;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.meetup-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.meetup-info span {
+  color: #2980b9;
+  font-size: 0.9rem;
+  background: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+}
+
+.meetup-info strong {
+  color: #1f5f99;
+}
+
+/* Action Needed */
+.action-needed {
+  padding: 1rem 1.5rem;
+  background: #fff3cd;
+  border-top: 1px solid #ffeaa7;
+  color: #856404;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .seller-orders-container {
+    margin: 1rem auto;
+    padding: 0 0.5rem;
+  }
+
+  .seller-orders-header h1 {
+    font-size: 2rem;
+  }
+
+  .sales-summary {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .summary-card {
+    padding: 1.5rem;
+  }
+
+  .summary-value {
+    font-size: 1.5rem;
+  }
+
+  .orders-controls {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .order-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .buyer-info {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .order-footer {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .order-actions {
+    justify-content: center;
+  }
+
+  .order-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+  }
+
+  .item-image {
+    width: 80px;
+    height: 80px;
+  }
+
+  .order-items {
+    padding: 1rem;
+  }
+
+  .meetup-summary {
+    padding: 1rem;
+  }
+
+  .meetup-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .meetup-info span {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .seller-orders-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .sales-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-card {
+    padding: 1rem;
+  }
+
+  .summary-value {
+    font-size: 1.25rem;
+  }
+
+  .order-header,
+  .buyer-info,
+  .order-footer,
+  .order-items {
+    padding: 0.75rem;
+  }
+
+  .chat-button {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .action-needed {
+    padding: 0.75rem;
+  }
+}

@@ -9,7 +9,7 @@ import {
 } from '@stripe/react-stripe-js';
 import { httpsCallable } from 'firebase/functions';
 import { functions, auth } from '../../firebase';
-import './StripePaymentForm.css';
+// import './StripePaymentForm.css';
 
 // Replace with your Stripe publishable key
 const stripePromise = loadStripe('pk_test_51RTSKl04broK5tvDQwkufdZlRtzE89atm9ShX2MvrD8lXRJAhvTOGGexlDvhlZKEfRoqveYqsddKywC0BZV5DS5500hpLQf2KB');
@@ -306,12 +306,12 @@ const PaymentForm = ({
     );
 };
 
-const StripePaymentForm = (props) => {
-    return (
-        <Elements stripe={stripePromise}>
-            <PaymentForm {...props} />
-        </Elements>
-    );
-};
+// const StripePaymentForm = (props) => {
+//     return (
+//         <Elements stripe={stripePromise}>
+//             <PaymentForm {...props} />
+//         </Elements>
+//     );
+// };
 
 export default StripePaymentForm;
