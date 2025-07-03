@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useCart } from '../../context/CartContext';
 import './AddToCart.css';
 
+
 const AddToCart = ({ product }) => {
     const { addToCart } = useCart();
     const [showNotification, setShowNotification] = useState(false);
