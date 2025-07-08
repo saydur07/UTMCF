@@ -1,12 +1,9 @@
-// src/App.js - Updated with Chat Trigger
+// src/App.js - Updated with protected routes
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
-
-
-
 
 // Import your existing components
 import Login from './components/Auth/Login';
@@ -48,6 +45,15 @@ import { CartProvider } from './context/CartContext';
 import { CampaignProvider } from './context/CampaignContext';
 import { ChatProvider } from './context/ChatContext';
 import './App.css';
+
+// Protected Route Component
+const ProtectedRoute = ({ children, user }) => {
+    if (!user) {
+        // Redirect to login if not authenticated
+        return <Navigate to="/login" replace />;
+    }
+    return children;
+};
 
 const App = () => {
     const [user, setUser] = useState(null);
@@ -144,9 +150,6 @@ const App = () => {
         return <AdminDashboard adminUser={adminUser} onLogout={handleAdminLogout} />;
     }
 
-    // Regular app with maintenance check - ONLY for regular users
-    // In your App.js, replace the entire return statement with this:
-
     return (
         <CartProvider>
             <CampaignProvider>
@@ -209,31 +212,146 @@ const App = () => {
                                             <Navbar user={user} />
                                             <main className="main-content">
                                                 <Routes>
+                                                    {/* Public routes */}
                                                     <Route path="/" element={<Home />} />
-                                                    <Route path="/marketplace" element={<Marketplace />} />
-                                                    <Route path="/product/:productId" element={<ProductDetail />} /> {/* NEW ROUTE */}
-                                                    <Route path="/fundraising" element={<Fundraising />} />
                                                     <Route path="/login" element={<Login />} />
                                                     <Route path="/register" element={<Register />} />
-                                                    <Route path="/add-item" element={<AddItem />} />
-                                                    <Route path="/cart" element={<Cart />} />
-                                                    <Route path="/my-listings" element={<MyListings />} />
-                                                    <Route path="/edit-listing/:id" element={<EditListing />} />
-                                                    <Route path="/support" element={<Support />} />
 
-                                                    {/* Campaign routes */}
-                                                    <Route path="/create-campaign" element={<CreateCampaign />} />
-                                                    <Route path="/my-campaigns" element={<MyCampaigns />} />
-                                                    <Route path="/campaign/:campaignId" element={<CampaignDetails />} />
-                                                    <Route path="/edit-campaign/:campaignId" element={<EditCampaign />} />
+                                                    {/* Protected routes - require authentication */}
+                                                    <Route
+                                                        path="/marketplace"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <Marketplace />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+                                                    <Route
+                                                        path="/product/:productId"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <ProductDetail />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+                                                    <Route
+                                                        path="/fundraising"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <Fundraising />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+                                                    <Route
+                                                        path="/add-item"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <AddItem />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+                                                    <Route
+                                                        path="/cart"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <Cart />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+                                                    <Route
+                                                        path="/my-listings"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <MyListings />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+                                                    <Route
+                                                        path="/edit-listing/:id"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <EditListing />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+                                                    <Route
+                                                        path="/support"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <Support />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
 
-                                                    {/* Marketplace payment routes */}
-                                                    <Route path="/checkout" element={<CheckoutOptions />} />
-                                                    <Route path="/orders" element={<Orders />} />
-                                                    <Route path="/my-sales" element={<SellerOrderManagement />} />
+                                                    {/* Campaign routes - protected */}
+                                                    <Route
+                                                        path="/create-campaign"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <CreateCampaign />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+                                                    <Route
+                                                        path="/my-campaigns"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <MyCampaigns />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+                                                    <Route
+                                                        path="/campaign/:campaignId"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <CampaignDetails />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+                                                    <Route
+                                                        path="/edit-campaign/:campaignId"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <EditCampaign />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
 
-                                                    {/* Order chat route */}
-                                                    <Route path="/order/:orderId" element={<OrderChat />} />
+                                                    {/* Marketplace payment routes - protected */}
+                                                    <Route
+                                                        path="/checkout"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <CheckoutOptions />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+                                                    <Route
+                                                        path="/orders"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <Orders />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+                                                    <Route
+                                                        path="/my-sales"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <SellerOrderManagement />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
+
+                                                    {/* Order chat route - protected */}
+                                                    <Route
+                                                        path="/order/:orderId"
+                                                        element={
+                                                            <ProtectedRoute user={user}>
+                                                                <OrderChat />
+                                                            </ProtectedRoute>
+                                                        }
+                                                    />
                                                 </Routes>
                                             </main>
 

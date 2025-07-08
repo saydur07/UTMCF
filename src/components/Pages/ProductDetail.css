@@ -182,7 +182,7 @@
 }
 
 .product-price {
-    font-size: 32px;
+    font-size: smaller;
     font-weight: 700;
     color: #3a86ff;
     margin: 0;

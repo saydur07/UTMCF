@@ -1,6 +1,4 @@
-// src/components/Layout/Navbar.js - Keep your existing navbar exactly as it is!
-// No changes needed - offers will go to chat system automatically
-
+// src/components/Layout/Navbar.js - Updated with authentication protection
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../../firebase';
@@ -92,13 +90,15 @@ const Navbar = () => {
             <div className="container">
                 <div className="nav-left">
                     <Link to="/" className="logo">UTMCF</Link>
-                    <div className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
-                        <Link to="/marketplace" className="nav-link">Marketplace</Link>
-                        <Link to="/fundraising" className="nav-link">Fundraising</Link>
-                        {user && (
+
+                    {/* Only show navigation links if user is logged in */}
+                    {user && (
+                        <div className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
+                            <Link to="/marketplace" className="nav-link">Marketplace</Link>
+                            <Link to="/fundraising" className="nav-link">Fundraising</Link>
                             <Link to="/add-item" className="nav-link">Add Item</Link>
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
 
                 <div className="nav-right">
@@ -239,11 +239,14 @@ const Navbar = () => {
                     )}
                 </div>
 
-                <div className="hamburger" onClick={toggleMobileMenu}>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+                {/* Only show hamburger menu if user is logged in */}
+                {user && (
+                    <div className="hamburger" onClick={toggleMobileMenu}>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                )}
             </div>
         </nav>
     );
